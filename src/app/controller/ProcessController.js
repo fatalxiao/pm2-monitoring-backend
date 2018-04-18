@@ -1,10 +1,10 @@
-import AppService from '../service/AppService.js';
+import ProcessService from '../service/ProcessService.js';
 import Response from '../utils/Response.js';
 import {GetMapping, PostMapping} from '../utils/ApiDecorator';
 
-class AppController {
+class ProcessController {
 
-    @PostMapping({value: '/dpe/analgesia/getAnalgesiaDataByPatientId/:patientId'})
+    @PostMapping({value: '/pm2surveillance/process/start/:processId'})
     static async startProcess(ctx) {
 
         const processId = ctx.params.processId;
@@ -12,10 +12,10 @@ class AppController {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await AppService.start(processId);
+        ctx.response.body = await ProcessService.start(processId);
 
     }
 
 };
 
-export default AppController;
+export default ProcessController;
