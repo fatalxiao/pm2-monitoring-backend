@@ -44,11 +44,6 @@ function mappingRouterToController(dir) {
         mappingController(require(dir + '/app/controller/' + file).default);
     });
 
-    // traversal all model file
-    fs.readdirSync(dir + '/app/model').forEach(file => {
-        mappingModel(require(dir + '/app/model/' + file).default);
-    });
-
     return router.routes();
 
 };
