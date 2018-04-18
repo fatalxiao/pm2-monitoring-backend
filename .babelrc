@@ -1,0 +1,29 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ]
+    ],
+    "plugins": [
+        [
+            "module-resolver",
+            {
+                "root": [
+                    "./src"
+                ],
+                "extensions": [
+                    ".js"
+                ]
+            }
+        ],
+        "transform-runtime",
+        "transform-export-extensions",
+        "transform-decorators-legacy",
+        "transform-object-rest-spread"
+    ]
+}
