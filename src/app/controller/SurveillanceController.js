@@ -3,7 +3,7 @@ import {GetMapping} from '../utils/ApiDecorator';
 
 class SurveillanceController {
 
-    @GetMapping({value: '/pm2surveillance/surveillance'})
+    @GetMapping({value: '/ps/surveillance'})
     static async getCurrent(ctx) {
         ctx.response.body = await SurveillanceService.getCurrent();
     }
