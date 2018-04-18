@@ -5,7 +5,7 @@ import {GetMapping, PostMapping} from '../utils/ApiDecorator';
 class ProcessController {
 
     @PostMapping({value: '/pm2surveillance/process/start/:processId'})
-    static async startProcess(ctx) {
+    static async start(ctx) {
 
         const processId = ctx.params.processId;
         if (!processId) {
