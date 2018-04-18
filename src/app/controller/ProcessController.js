@@ -4,6 +4,11 @@ import {GetMapping, PostMapping} from '../utils/ApiDecorator';
 
 class ProcessController {
 
+    @GetMapping({value: '/pm2surveillance/processes'})
+    static async getAll(ctx) {
+        ctx.response.body = await ProcessService.getAll();
+    }
+
     @PostMapping({value: '/pm2surveillance/process/start/:processId'})
     static async start(ctx) {
 

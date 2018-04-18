@@ -1,0 +1,16 @@
+[
+    {
+        "name": "alcedo-ui",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    },
+    {
+        "name": "dplatform-click-web",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }
+]
