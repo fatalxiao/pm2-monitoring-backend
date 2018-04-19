@@ -13,8 +13,11 @@ app
 .use(cors())
 .use(serve('.'))
 .use(bodyParser())
-.use(mappingRouterToController(__dirname))
-.listen(config.port, error => {
+.use(mappingRouterToController(__dirname));
+
+app.ws.use(mappingRouterToController(__dirname, true));
+
+app.listen(config.port, error => {
 
     if (error) {
         console.log(error);
