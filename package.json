@@ -32,6 +32,7 @@
         "koa-bodyparser": "^4.2.0",
         "koa-router": "^7.3.0",
         "koa-static": "^4.0.2",
+        "koa-websocket": "^4.1.0",
         "lodash": "^4.17.4",
         "moment": "^2.21.0",
         "mysql2": "^1.5.1",

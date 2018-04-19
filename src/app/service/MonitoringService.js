@@ -4,9 +4,13 @@ import Response from '../utils/Response.js';
 async function getCurrent() {
 
     const json = await rp('http://localhost:9615');
-    console.log(json);
 
-    return Response.buildSuccess(json);
+    try {
+        const data = JSON.parse(json);
+        return Response.buildSuccess(data);
+    } catch (e) {
+        return Response.buildError('Request PM2 HTTP Interface Failure.');
+    }
 
 };
 
