@@ -14,7 +14,7 @@ const REQUEST_PROTOCOL = Symbol('REQUEST_PROTOCOL'),
         DELETE: 'delete'
     };
 
-function descriptorHandler(descriptor, {protocol = RequestProtocol.HTTP, method, route}) {
+function descriptorHandler(descriptor, {protocol, method, route}) {
     protocol && (descriptor.value[REQUEST_PROTOCOL] = protocol);
     method && (descriptor.value[REQUEST_METHOD] = method);
     route && (descriptor.value[REQUEST_ROUTE] = route);
@@ -22,23 +22,23 @@ function descriptorHandler(descriptor, {protocol = RequestProtocol.HTTP, method,
 }
 
 const RequestMapping = ({protocol, method, route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {method, route});
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method, route});
 };
 
 const GetMapping = ({route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {method: RequestMethod.GET, route});
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.GET, route});
 };
 
 const PostMapping = ({route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {method: RequestMethod.POST, route});
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.POST, route});
 };
 
 const PutMapping = ({route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {method: RequestMethod.PUT, route});
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.PUT, route});
 };
 
 const DeleteMapping = ({route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {method: RequestMethod.DELETE, route});
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.DELETE, route});
 };
 
 const WsRequestMapping = ({protocol, method, route}) => (target, name, descriptor) => {
@@ -63,6 +63,7 @@ const WsDeleteMapping = ({route}) => (target, name, descriptor) => {
 
 export {
 
+    REQUEST_PROTOCOL,
     REQUEST_METHOD,
     REQUEST_ROUTE,
 
