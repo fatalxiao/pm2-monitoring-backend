@@ -33,11 +33,11 @@ const PostMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.POST, route});
 };
 
-const PutMapping = ({value}) => (target, name, descriptor) => {
+const PutMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.PUT, route});
 };
 
-const DeleteMapping = ({value}) => (target, name, descriptor) => {
+const DeleteMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.DELETE, route});
 };
 
@@ -53,11 +53,11 @@ const WsPostMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.POST, route});
 };
 
-const WsPutMapping = ({value}) => (target, name, descriptor) => {
+const WsPutMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.PUT, route});
 };
 
-const WsDeleteMapping = ({value}) => (target, name, descriptor) => {
+const WsDeleteMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.DELETE, route});
 };
 
