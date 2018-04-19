@@ -1,5 +1,11 @@
-const REQUEST_METHOD = Symbol('REQUEST_METHOD'),
+const REQUEST_PROTOCOL = Symbol('REQUEST_PROTOCOL'),
+    REQUEST_METHOD = Symbol('REQUEST_METHOD'),
     REQUEST_ROUTE = Symbol('REQUEST_ROUTE'),
+
+    RequestProtocol = {
+        HTTP: 'http',
+        WEBSOCKET: 'ws'
+    },
 
     RequestMethod = {
         GET: 'get',
@@ -8,34 +14,51 @@ const REQUEST_METHOD = Symbol('REQUEST_METHOD'),
         DELETE: 'delete'
     };
 
-const RequestMapping = ({method, value}) => (target, name, descriptor) => {
+function descriptorHandler(descriptor, {protocol, method, route}) {
+    descriptor.value[REQUEST_PROTOCOL] = protocol;
     descriptor.value[REQUEST_METHOD] = method;
-    descriptor.value[REQUEST_ROUTE] = value;
+    descriptor.value[REQUEST_ROUTE] = route;
     return descriptor;
+}
+
+const RequestMapping = ({protocol, method, route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method, route});
 };
 
-const GetMapping = ({value}) => (target, name, descriptor) => {
-    descriptor.value[REQUEST_METHOD] = RequestMethod.GET;
-    descriptor.value[REQUEST_ROUTE] = value;
-    return descriptor;
+const GetMapping = ({route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.GET, route});
 };
 
-const PostMapping = ({value}) => (target, name, descriptor) => {
-    descriptor.value[REQUEST_METHOD] = RequestMethod.POST;
-    descriptor.value[REQUEST_ROUTE] = value;
-    return descriptor;
+const PostMapping = ({route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.POST, route});
 };
 
 const PutMapping = ({value}) => (target, name, descriptor) => {
-    descriptor.value[REQUEST_METHOD] = RequestMethod.PUT;
-    descriptor.value[REQUEST_ROUTE] = value;
-    return descriptor;
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.PUT, route});
 };
 
 const DeleteMapping = ({value}) => (target, name, descriptor) => {
-    descriptor.value[REQUEST_METHOD] = RequestMethod.DELETE;
-    descriptor.value[REQUEST_ROUTE] = value;
-    return descriptor;
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.DELETE, route});
+};
+
+const WsRequestMapping = ({protocol, method, route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method, route});
+};
+
+const WsGetMapping = ({route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.GET, route});
+};
+
+const WsPostMapping = ({route}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.POST, route});
+};
+
+const WsPutMapping = ({value}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.PUT, route});
+};
+
+const WsDeleteMapping = ({value}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.WEBSOCKET, method: RequestMethod.DELETE, route});
 };
 
 export {
@@ -43,12 +66,19 @@ export {
     REQUEST_METHOD,
     REQUEST_ROUTE,
 
+    RequestProtocol,
     RequestMethod,
 
     RequestMapping,
     GetMapping,
     PostMapping,
     PutMapping,
-    DeleteMapping
+    DeleteMapping,
+
+    WsRequestMapping,
+    WsGetMapping,
+    WsPostMapping,
+    WsPutMapping,
+    WsDeleteMapping
 
 };

@@ -2,11 +2,12 @@ import Koa from 'koa';
 import cors from '@koa/cors';
 import serve from 'koa-static';
 import bodyParser from 'koa-bodyparser';
+import websockify from 'koa-websocket';
 
 import mappingRouterToController from './app/utils/mappingRouterToController.js';
 import config from './config.js';
 
-const app = new Koa();
+const app = websockify(new Koa());
 
 app
 .use(cors())

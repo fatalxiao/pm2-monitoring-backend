@@ -3,7 +3,7 @@ import {GetMapping} from '../utils/ApiDecorator';
 
 class MonitoringController {
 
-    @GetMapping({value: '/pm/monitoring'})
+    @GetMapping({route: '/pm/monitoring'})
     static async getCurrent(ctx) {
         ctx.response.body = await MonitoringService.getCurrent();
     }

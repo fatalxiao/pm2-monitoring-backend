@@ -4,12 +4,12 @@ import {GetMapping, PostMapping} from '../utils/ApiDecorator';
 
 class ProcessController {
 
-    @GetMapping({value: '/pm/processes'})
+    @GetMapping({route: '/pm/processes'})
     static async getAll(ctx) {
         ctx.response.body = await ProcessService.getAll();
     }
 
-    @PostMapping({value: '/pm/process/start/:processId'})
+    @PostMapping({route: '/pm/process/start/:processId'})
     static async start(ctx) {
 
         const processId = ctx.params.processId;
