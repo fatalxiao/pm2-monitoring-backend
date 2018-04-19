@@ -4,9 +4,10 @@ import {REQUEST_METHOD, REQUEST_ROUTE} from './ApiDecorator';
 
 const router = Router();
 
-function mappingMethod(controller, method) {
+function mappingMethod(controller, method, isWebsocket) {
 
-    const requestMethod = method[REQUEST_METHOD],
+    const requestProtocol = method[REQUEST_PROTOCOL],
+        requestMethod = method[REQUEST_METHOD],
         requestRoute = method[REQUEST_ROUTE];
 
     // add mapping route
@@ -15,7 +16,7 @@ function mappingMethod(controller, method) {
 
 }
 
-function mappingController(controller) {
+function mappingController(controller, isWebsocket) {
 
     if (!controller) {
         return;
@@ -30,18 +31,18 @@ function mappingController(controller) {
             continue;
         }
 
-        mappingMethod(controller, controller[methodName]);
+        mappingMethod(controller, controller[methodName], isWebsocket);
 
     }
 
 }
 
-function mappingRouterToController(dir) {
+function mappingRouterToController(dir, isWebsocket) {
 
     // traversal all controll file
     fs.readdirSync(dir + '/app/controller').forEach(file => {
         // console.log(`process controller: ${file}`);
-        mappingController(require(dir + '/app/controller/' + file).default);
+        mappingController(require(dir + '/app/controller/' + file).default, isWebsocket);
     });
 
     return router.routes();
