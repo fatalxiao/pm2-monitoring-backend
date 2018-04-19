@@ -3,13 +3,13 @@
     "author": "liangxiaojun",
     "version": "1.0.0",
     "description": "PM2 monitoring Back-end Project.",
-    "main": "./src/main.js",
+    "main": "./src/app.js",
     "scripts": {
-        "dev": "nodemon src/main --exec babel-node $NODE_DEBUG_OPTION",
+        "dev": "nodemon src/app --exec babel-node $NODE_DEBUG_OPTION",
         "clean": "rimraf dist",
         "package": "cross-env NODE_ENV=production gulp package",
         "build": "npm run clean && npm run package",
-        "run": "cross-env NODE_ENV=production node dist/main",
+        "run": "cross-env NODE_ENV=production node dist/app",
         "start": "npm run build && npm run run"
     },
     "repository": {
