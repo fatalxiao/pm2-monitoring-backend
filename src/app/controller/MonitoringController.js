@@ -6,13 +6,11 @@ class MonitoringController {
     @WsGetMapping({route: '/pm/monitoring'})
     static async getCurrent(ctx) {
 
-        const res = await MonitoringService.getCurrent();
-
-        ctx.websocket.send(res);
-
         ctx.websocket.on('message', () => {
-            ctx.websocket.send(res);
+            MonitoringService.getCurrent().then(data => ctx.websocket.send(data));
         });
+
+        ctx.websocket.send(await MonitoringService.getCurrent());
 
     }
 
