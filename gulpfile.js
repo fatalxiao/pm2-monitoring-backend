@@ -3,7 +3,7 @@ const gulp = require('gulp'),
     gulpSequence = require('gulp-sequence');
 
 gulp.task('es', () =>
-    gulp.src(['./src/**'])
+    gulp.src(['./src/**','!./src/pm2-apps/**'])
     .pipe(babel({
         plugins: ['transform-runtime']
     }))
