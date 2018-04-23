@@ -1,12 +1,26 @@
 import ProcessService from '../service/ProcessService.js';
 import Response from '../utils/Response.js';
-import {GetMapping, PostMapping} from '../utils/ApiDecorator';
+import {GetMapping, PostMapping, WsGetMapping} from '../utils/ApiDecorator';
 
 class ProcessController {
 
     @GetMapping({route: '/pm/processes'})
     static async getAll(ctx) {
         ctx.response.body = await ProcessService.getAll();
+    }
+
+    @WsGetMapping({route: '/pm/process/upload/:processName'})
+    static async getCurrent(ctx) {
+
+        const processName = ctx.params.processName;
+        if (!processName) {
+            return ctx.websocket.send(Response.buildParamError('Process Name is required'));
+        }
+
+        ctx.websocket.on('message', message => {
+            console.log(message);
+        });
+
     }
 
     @PostMapping({route: '/pm/process/start/:processId'})
