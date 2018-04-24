@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 import ProcessService from '../service/ProcessService.js';
 import Response from '../utils/Response.js';
 import {GetMapping, PostMapping, WsGetMapping} from '../utils/ApiDecorator';
@@ -10,7 +13,7 @@ class ProcessController {
     }
 
     @WsGetMapping({route: '/pm/process/upload/:processName'})
-    static async getCurrent(ctx) {
+    static async uploadProcess(ctx) {
 
         const processName = ctx.params.processName;
         if (!processName) {
@@ -18,10 +21,29 @@ class ProcessController {
         }
 
         ctx.websocket.on('message', message => {
-            console.log(message);
+            fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${processName}.zip`), message);
+            return ctx.websocket.send(Response.buildSuccess());
         });
 
     }
+
+    // @PostMapping({route: '/pm/process/upload/:processName'})
+    // static async uploadProcess(ctx) {
+    //
+    //     const processName = ctx.params.processName;
+    //     if (!processName) {
+    //         return ctx.response.body = Response.buildParamError('Process Name is required');
+    //     }
+    //
+    //     console.log(ctx.request.body);
+    //
+    //     if (!ctx.request.body || !ctx.request.body.files || !ctx.request.body.files.file) {
+    //         return ctx.response.body = Response.buildParamError('Process Package is required');
+    //     }
+    //
+    //     ctx.response.body = await ProcessService.uploadProcess(processName, ctx.request.body.files.file);
+    //
+    // }
 
     @PostMapping({route: '/pm/process/start/:processId'})
     static async start(ctx) {
