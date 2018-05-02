@@ -1,17 +1,15 @@
-import rp from 'request-promise';
+import pm2 from 'pm2';
 import Response from '../utils/Response.js';
 
-async function getCurrent() {
-
-    const json = await rp('http://localhost:9615');
-
-    try {
-        const data = JSON.parse(json);
-        return Response.buildSuccess(data);
-    } catch (e) {
-        return Response.buildError('Request PM2 HTTP Interface Failure.');
-    }
-
+function getCurrent() {
+    return new Promise((resolve, reject) => {
+        pm2.list((err, processDescriptionList) => {
+            if (err) {
+                reject(Response.buildError('Request PM2 HTTP Interface Failure.'));
+            }
+            resolve(Response.buildSuccess(processDescriptionList));
+        });
+    });
 };
 
 export default {
