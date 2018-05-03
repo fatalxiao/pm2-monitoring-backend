@@ -5,7 +5,7 @@
     "description": "PM2 monitoring Back-end Project.",
     "main": "./src/app.js",
     "scripts": {
-        "dev": "nodemon src/app --exec babel-node",
+        "dev": "nodemon src/app --exec babel-node $NODE_DEBUG_OPTION",
         "clean": "rimraf dist",
         "package": "cross-env NODE_ENV=production gulp package",
         "build": "npm run clean && npm run package",
