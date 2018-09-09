@@ -10,9 +10,26 @@ async function getProcesses() {
         return Response.buildSuccess([]);
     }
 
-    const list = await getPMList();
+    const processList = await getPMList();
 
-    return Response.buildSuccess(list);
+    for (let item of data) {
+
+        if (!item) {
+            continue;
+        }
+
+        const index = processList.findIndex(p => p && p.name === item.name);
+
+        if (index !== -1) {
+            data;
+        }
+
+    }
+
+    return Response.buildSuccess(data.filter(item => item).map(item => {
+        const index = processList.findIndex(p => p && p.name === item.name);
+        return index === -1 ? item : {...item, ...processList[index]};
+    }));
 
 };
 
