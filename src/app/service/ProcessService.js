@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Response from '../utils/Response.js';
 
-async function getAll() {
+async function getProcesses() {
 
     const json = fs.readFileSync(path.resolve(__dirname, '../../processes.json'));
 
@@ -20,6 +20,6 @@ async function start(processId) {
 };
 
 export default {
-    getAll,
+    getProcesses,
     start
 };

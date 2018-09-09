@@ -3,13 +3,15 @@ import path from 'path';
 
 import ProcessService from '../service/ProcessService.js';
 import Response from '../utils/Response.js';
-import {GetMapping, PostMapping, WsGetMapping} from '../utils/ApiDecorator';
+import {PostMapping, WsGetMapping} from '../utils/ApiDecorator';
 
 class ProcessController {
 
-    @GetMapping({route: '/pm/processes'})
-    static async getAll(ctx) {
-        ctx.response.body = await ProcessService.getAll();
+    @WsGetMapping({route: '/pm/processes'})
+    static async getProcesses(ctx) {
+        ctx.websocket.on('message', () => {
+            ProcessService.getProcesses().then(data => ctx.websocket.send(data));
+        });
     }
 
     @WsGetMapping({route: '/pm/process/upload/:processName'})
