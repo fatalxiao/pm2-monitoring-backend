@@ -15,4 +15,4 @@ package-lock.json
 
 # Distribution
 /dist
-pm2-apps
+/pm2-apps
