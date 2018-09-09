@@ -1,17 +1,15 @@
-import fs from 'fs';
-import path from 'path';
 import Response from '../utils/Response.js';
+import {getProcessesConfig} from '../utils/ProcessUtil.js';
 
 async function getProcesses() {
 
-    const json = fs.readFileSync(path.resolve(__dirname, '../../processes.json'));
+    const data = getProcessesConfig();
 
-    try {
-        const data = JSON.parse(json);
-        return Response.buildSuccess(data);
-    } catch (e) {
+    if (!data) {
         return Response.buildSuccess([]);
     }
+
+    return Response.buildSuccess(data);
 
 };
 
