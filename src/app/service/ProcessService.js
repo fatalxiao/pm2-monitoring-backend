@@ -1,5 +1,6 @@
 import Response from '../utils/Response.js';
 import {getProcessesConfig} from '../utils/ProcessUtil.js';
+import {getPMList} from '../utils/PMUtil.js';
 
 async function getProcesses() {
 
@@ -9,7 +10,9 @@ async function getProcesses() {
         return Response.buildSuccess([]);
     }
 
-    return Response.buildSuccess(data);
+    const list = await getPMList();
+
+    return Response.buildSuccess(list);
 
 };
 
