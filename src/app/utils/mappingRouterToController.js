@@ -40,7 +40,7 @@ function mappingController(controller, isWebsocket) {
 
 }
 
-function mappingRouterToController(dir, isWebsocket) {
+function mappingRouter(dir, isWebsocket) {
 
     // traversal all controll file
     fs.readdirSync(dir + '/app/controller').forEach(file => {
@@ -52,4 +52,10 @@ function mappingRouterToController(dir, isWebsocket) {
 
 };
 
-export default mappingRouterToController;
+export function mappingRouterToController(dir) {
+    return mappingRouter(dir, false);
+};
+
+export function mappingWebsocketRouterToController(dir) {
+    return mappingRouter(dir, true);
+};
