@@ -1,9 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 
-function get() {
+export function getProcessesConfig() {
 
-    const json = fs.readFileSync(path.resolve(__dirname, '../processes.json'));
+    const json = fs.readFileSync(path.resolve(__dirname, '../../processes.json'));
 
     if (!json) {
         return;
@@ -17,11 +17,6 @@ function get() {
 
 }
 
-function set(json) {
+export function setProcessesConfig(json) {
 
 }
-
-export default {
-    get,
-    set
-};
