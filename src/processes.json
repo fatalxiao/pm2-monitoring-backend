@@ -7,7 +7,7 @@
         }
     },
     {
-        "name": "dplatform-click-web",
+        "name": "dplatform-click-web-testing",
         "script": "server.js",
         "env": {
             "NODE_ENV": "production"
