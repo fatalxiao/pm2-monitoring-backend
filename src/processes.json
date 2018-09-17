@@ -4,13 +4,15 @@
         "script": "server.js",
         "env": {
             "NODE_ENV": "production"
-        }
+        },
+        "description": ""
     },
     {
         "name": "dplatform-click-web-testing",
         "script": "server.js",
         "env": {
             "NODE_ENV": "production"
-        }
+        },
+        "description": ""
     }
 ]
