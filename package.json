@@ -1,0 +1,76 @@
+{
+    "name": "pm2-monitoring-backend",
+    "author": "liangxiaojun",
+    "version": "1.0.0",
+    "description": "PM2 monitoring Back-end Project.",
+    "main": "./src/app.js",
+    "scripts": {
+        "dev": "nodemon $NODE_DEBUG_OPTION src/app --exec babel-node",
+        "clean": "rimraf dist",
+        "package": "cross-env NODE_ENV=production gulp package",
+        "build": "npm run clean && npm run package",
+        "run": "cross-env NODE_ENV=production node $NODE_DEBUG_OPTION dist/app",
+        "start": "npm run build && npm run run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fatalxiao/pm2-monitoring-backend"
+    },
+    "keywords": [
+        "pm2",
+        "monitoring",
+        "koa2"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/fatalxiao/pm2-monitoring-backend/issues"
+    },
+    "dependencies": {
+        "@koa/cors": "^2.2.2",
+        "koa": "^2.5.2",
+        "koa-bodyparser": "^4.2.1",
+        "koa-router": "^7.4.0",
+        "koa-static": "^5.0.0",
+        "koa-websocket": "^5.0.1",
+        "lodash": "^4.17.10",
+        "moment": "^2.22.2",
+        "mysql2": "^1.6.1",
+        "node-xlsx": "^0.12.1",
+        "pm2": "^3.0.4",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.2",
+        "sequelize": "^4.38.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.0.0",
+        "@babel/core": "^7.0.0",
+        "@babel/node": "^7.0.0",
+        "@babel/plugin-proposal-class-properties": "^7.0.0",
+        "@babel/plugin-proposal-decorators": "^7.0.0",
+        "@babel/plugin-proposal-do-expressions": "^7.0.0",
+        "@babel/plugin-proposal-export-default-from": "^7.0.0",
+        "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+        "@babel/plugin-proposal-function-bind": "^7.0.0",
+        "@babel/plugin-proposal-function-sent": "^7.0.0",
+        "@babel/plugin-proposal-json-strings": "^7.0.0",
+        "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+        "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+        "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+        "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+        "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+        "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+        "@babel/plugin-syntax-import-meta": "^7.0.0",
+        "@babel/plugin-transform-runtime": "^7.0.0",
+        "@babel/polyfill": "^7.0.0",
+        "@babel/preset-env": "^7.0.0",
+        "@babel/runtime": "^7.0.0",
+        "babel-plugin-module-resolver": "^3.1.1",
+        "cross-env": "^5.2.0",
+        "gulp": "^4.0.0",
+        "gulp-babel": "^8.0.0",
+        "mocha": "^5.2.0",
+        "nodemon": "^1.18.4",
+        "rimraf": "^2.6.2"
+    }
+}

@@ -1,0 +1,34 @@
+[
+    {
+        "name": "alcedo-ui-dev",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        },
+        "description": ""
+    },
+    {
+        "name": "alcedo-ui-testing",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        },
+        "description": ""
+    },
+    {
+        "name": "alcedo-ui-demo",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        },
+        "description": ""
+    },
+    {
+        "name": "alcedo-ui-prod",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "production"
+        },
+        "description": ""
+    }
+]
