@@ -10,25 +10,18 @@ async function getProcesses() {
         return Response.buildSuccess([]);
     }
 
+    // get pm2 list data
     const processList = await getPMList();
-
-    for (let item of data) {
-
-        if (!item) {
-            continue;
-        }
-
-        const index = processList.findIndex(p => p && p.name === item.name);
-
-        if (index !== -1) {
-            data;
-        }
-
-    }
 
     return Response.buildSuccess(data.filter(item => item).map(item => {
         const index = processList.findIndex(p => p && p.name === item.name);
-        return index === -1 ? item : {...item, ...processList[index]};
+        return index === -1 ? item : {
+            ...item,
+            pid: processList[index].pid,
+            pm_id: processList[index].pm_id,
+            status: processList[index].pm2_env.status,
+            monit: processList[index].monit
+        };
     }));
 
 };
