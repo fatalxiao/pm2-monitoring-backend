@@ -13,7 +13,7 @@ function connect(callback) {
                 reject(err);
             }
 
-            callback(resolve, reject);
+            callback && callback(resolve, reject);
 
         });
     });
@@ -40,6 +40,11 @@ function list() {
  * @returns {Promise<any>}
  */
 function start(options) {
+
+    if (!options) {
+        return;
+    }
+
     return connect((resolve, reject) => {
         pm2.start(options, (err, proc) => {
 
@@ -53,6 +58,7 @@ function start(options) {
 
         });
     });
+
 }
 
 /**
@@ -61,6 +67,11 @@ function start(options) {
  * @returns {Promise<any>}
  */
 function pauseById(id) {
+
+    if (id == undefined) {
+        return;
+    }
+
     return connect((resolve, reject) => {
         pm2.stop(id, (err, proc) => {
 
@@ -74,6 +85,7 @@ function pauseById(id) {
 
         });
     });
+
 }
 
 /**
@@ -103,6 +115,11 @@ function pauseAll() {
  * @returns {Promise<any>}
  */
 function restartById(id) {
+
+    if (id == undefined) {
+        return;
+    }
+
     return connect((resolve, reject) => {
         pm2.restart(id, (err, proc) => {
 
@@ -116,6 +133,7 @@ function restartById(id) {
 
         });
     });
+
 }
 
 /**
@@ -145,6 +163,11 @@ function restartAll() {
  * @returns {Promise<any>}
  */
 function stopById(id) {
+
+    if (id == undefined) {
+        return;
+    }
+
     return connect((resolve, reject) => {
         pm2.delete(id, (err, proc) => {
 
@@ -158,6 +181,7 @@ function stopById(id) {
 
         });
     });
+
 }
 
 /**
@@ -187,6 +211,11 @@ function stopAll() {
  * @returns {Promise<any>}
  */
 function reloadById(id) {
+
+    if (id == undefined) {
+        return;
+    }
+
     return connect((resolve, reject) => {
         pm2.reload(id, (err, proc) => {
 
@@ -200,6 +229,7 @@ function reloadById(id) {
 
         });
     });
+
 }
 
 /**
