@@ -47,15 +47,15 @@ class ProcessController {
     //
     // }
 
-    @PostMapping({route: '/pm/process/start/:processId'})
-    static async start(ctx) {
+    @PostMapping({route: '/pm/process/start/:processName'})
+    static async startByName(ctx) {
 
-        const processId = ctx.params.processId;
-        if (!processId) {
-            return ctx.response.body = Response.buildParamError('Process ID is required');
+        const processName = ctx.params.processName;
+        if (!processName) {
+            return ctx.response.body = Response.buildParamError('Process Name is required');
         }
 
-        ctx.response.body = await ProcessService.start(processId);
+        ctx.response.body = await ProcessService.startByName(processName);
 
     }
 
