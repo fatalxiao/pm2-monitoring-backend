@@ -1,4 +1,5 @@
 import pm2 from 'pm2';
+import path from 'path';
 
 /**
  * connect pm2
@@ -46,7 +47,10 @@ function start(options) {
     }
 
     return connect((resolve, reject) => {
-        pm2.start(options, (err, proc) => {
+        pm2.start({
+            ...options,
+            script: path.resolve(__dirname, `../../pm2-apps/${options.name}/${options.script}`)
+        }, (err, proc) => {
 
             pm2.disconnect();
 
