@@ -14,9 +14,7 @@ function build([code, message], data) {
         message
     };
 
-    if (data) {
-        json.data = data;
-    }
+    json.data = data || '';
 
     return JSON.stringify(json);
 
