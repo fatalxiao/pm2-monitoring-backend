@@ -1,17 +1,6 @@
 import Response from '../utils/Response.js';
 import {getProcessesConfig} from '../utils/ProcessUtil.js';
-import {
-    getPMList,
-    start,
-    stopById,
-    stopAll,
-    restartById,
-    restartAll,
-    delById,
-    delAll,
-    reloadById,
-    reloadAll
-} from '../utils/PMUtil.js';
+import PMUtil from '../utils/PMUtil.js';
 
 async function getProcesses() {
 
@@ -24,7 +13,7 @@ async function getProcesses() {
     try {
 
         // get pm2 list data
-        const processList = await getPMList();
+        const processList = await PMUtil.list();
 
         return Response.buildSuccess(data.filter(item => item).map(item => {
             const index = processList.findIndex(p => p && p.name === item.name);
@@ -45,7 +34,7 @@ async function getProcesses() {
 
 async function start(options) {
     try {
-        const proc = await start(options);
+        const proc = await PMUtil.start(options);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -68,7 +57,7 @@ async function startByName(processName) {
 
 async function stopById(processId) {
     try {
-        const proc = await stopById(processId);
+        const proc = await PMUtil.stopById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -77,7 +66,7 @@ async function stopById(processId) {
 
 async function stopAll() {
     try {
-        const proc = await stopAll();
+        const proc = await PMUtil.stopAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -86,7 +75,7 @@ async function stopAll() {
 
 async function restartById(processId) {
     try {
-        const proc = await restartById(processId);
+        const proc = await PMUtil.restartById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -95,7 +84,7 @@ async function restartById(processId) {
 
 async function restartAll() {
     try {
-        const proc = await restartAll();
+        const proc = await PMUtil.restartAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -104,7 +93,7 @@ async function restartAll() {
 
 async function delById(processId) {
     try {
-        const proc = await delById(processId);
+        const proc = await PMUtil.delById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -113,7 +102,7 @@ async function delById(processId) {
 
 async function delAll() {
     try {
-        const proc = await delAll();
+        const proc = await PMUtil.delAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -122,7 +111,7 @@ async function delAll() {
 
 async function reloadById(processId) {
     try {
-        const proc = await reloadById(processId);
+        const proc = await PMUtil.reloadById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
@@ -131,7 +120,7 @@ async function reloadById(processId) {
 
 async function reloadAll() {
     try {
-        const proc = await reloadAll();
+        const proc = await PMUtil.reloadAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError(e);
