@@ -7,11 +7,6 @@ import pm2 from 'pm2';
  */
 function connect(callback) {
     return new Promise((resolve, reject) => {
-
-        if (id == undefined) {
-            reject();
-        }
-
         pm2.connect(err => {
 
             if (err) {
