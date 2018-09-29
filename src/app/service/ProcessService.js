@@ -27,7 +27,7 @@ async function getProcesses() {
         }));
 
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Get Process List Failed');
     }
 
 };
@@ -37,7 +37,7 @@ async function start(options) {
         const proc = await PMUtil.start(options);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Start Process Failed');
     }
 };
 
@@ -55,21 +55,21 @@ async function startByName(processName) {
 
 };
 
-async function stopById(processId) {
+async function pauseById(processId) {
     try {
-        const proc = await PMUtil.stopById(processId);
+        const proc = await PMUtil.pauseById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Stop Process Failed');
     }
 };
 
-async function stopAll() {
+async function pauseAll() {
     try {
-        const proc = await PMUtil.stopAll();
+        const proc = await PMUtil.pauseAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Stop Processes Failed');
     }
 };
 
@@ -78,7 +78,7 @@ async function restartById(processId) {
         const proc = await PMUtil.restartById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Restart Process Failed');
     }
 };
 
@@ -87,25 +87,25 @@ async function restartAll() {
         const proc = await PMUtil.restartAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Restart Processes Failed');
     }
 };
 
-async function delById(processId) {
+async function stopById(processId) {
     try {
-        const proc = await PMUtil.delById(processId);
+        const proc = await PMUtil.stopById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Delete Process Failed');
     }
 };
 
-async function delAll() {
+async function stopAll() {
     try {
-        const proc = await PMUtil.delAll();
+        const proc = await PMUtil.stopAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Delete Processes Failed');
     }
 };
 
@@ -114,7 +114,7 @@ async function reloadById(processId) {
         const proc = await PMUtil.reloadById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Reload Process Failed');
     }
 };
 
@@ -123,7 +123,7 @@ async function reloadAll() {
         const proc = await PMUtil.reloadAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError(e);
+        return Response.buildError('Reload Processes Failed');
     }
 };
 
@@ -131,12 +131,12 @@ export default {
     getProcesses,
     start,
     startByName,
-    stopById,
-    stopAll,
+    pauseById,
+    pauseAll,
     restartById,
     restartAll,
-    delById,
-    delAll,
+    stopById,
+    stopAll,
     reloadById,
     reloadAll
 };
