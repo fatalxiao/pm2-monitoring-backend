@@ -47,11 +47,11 @@ async function startByName(processName) {
     let index;
 
     if (!data || data.length < 1
-        || (index = data.findIndex(item => item.name === processName) === -1)) {
+        || (index = data.findIndex(item => item.name === processName)) === -1) {
         return Response.buildParamError('Process Name Not Found');
     }
 
-    return start(data[index]);
+    return await start(data[index]);
 
 };
 
