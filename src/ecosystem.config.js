@@ -1,7 +1,7 @@
 module.exports = {
     apps: [{
-        name: 'dplatform-click-web-testing',
-        script: './pm2-apps/dplatform-click-web-testing/server.js',
+        name: 'alcedo-ui',
+        script: './pm2-apps/alcedo-ui/server.js',
         env: {
             NODE_ENV: 'development'
         },

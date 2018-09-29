@@ -1,22 +1,20 @@
 const Mappings = {
 
-    SUCCESS: [2000, 'success'],
+    SUCCESS: [2000, 'Success'],
 
-    ERROR: [4000, 'error'],
-    PARAM_INCORRECT: [4001, 'param incorrect']
+    ERROR: [4000, 'Error'],
+    PARAM_INCORRECT: [4001, 'Param Incorrect']
 
 };
 
-function build([code, msg], data) {
+function build([code, message], data) {
 
     const json = {
         code,
-        msg
+        message
     };
 
-    if (data) {
-        json.data = data;
-    }
+    json.data = data || '';
 
     return JSON.stringify(json);
 

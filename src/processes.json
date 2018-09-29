@@ -1,11 +1,22 @@
 [
     {
+        "name": "alcedo-ui",
+        "script": "server.js",
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "env_production": {
+            "NODE_ENV": "production"
+        },
+        "description": "alcedo-ui"
+    },
+    {
         "name": "alcedo-ui-dev",
         "script": "server.js",
         "env": {
             "NODE_ENV": "production"
         },
-        "description": ""
+        "description": "alcedo-ui development environment"
     },
     {
         "name": "alcedo-ui-testing",
@@ -13,7 +24,7 @@
         "env": {
             "NODE_ENV": "production"
         },
-        "description": ""
+        "description": "alcedo-ui testing environment"
     },
     {
         "name": "alcedo-ui-demo",
@@ -21,7 +32,7 @@
         "env": {
             "NODE_ENV": "production"
         },
-        "description": ""
+        "description": "alcedo-ui demo environment"
     },
     {
         "name": "alcedo-ui-prod",
@@ -29,6 +40,6 @@
         "env": {
             "NODE_ENV": "production"
         },
-        "description": ""
+        "description": "alcedo-ui production environment"
     }
 ]
