@@ -18,7 +18,7 @@ class ProcessController {
     static async uploadProcess(ctx) {
 
         const processName = ctx.params.processName;
-        if (!processName) {
+        if (processName == undefined) {
             return ctx.websocket.send(Response.buildParamError('Process Name is required'));
         }
 
@@ -51,12 +51,80 @@ class ProcessController {
     static async startByName(ctx) {
 
         const processName = ctx.params.processName;
-        if (!processName) {
+        if (processName == undefined) {
             return ctx.response.body = Response.buildParamError('Process Name is required');
         }
 
         ctx.response.body = await ProcessService.startByName(processName);
 
+    }
+
+    @PostMapping({route: '/pm/process/stop/:processId'})
+    static async stopById(ctx) {
+
+        const processId = ctx.params.processId;
+        if (processId == undefined) {
+            return ctx.response.body = Response.buildParamError('Process ID is required');
+        }
+
+        ctx.response.body = await ProcessService.stopById(processId);
+
+    }
+
+    @PostMapping({route: '/pm/process/stop'})
+    static async stopAll(ctx) {
+        ctx.response.body = await ProcessService.stopAll();
+    }
+
+    @PostMapping({route: '/pm/process/restart/:processId'})
+    static async restartById(ctx) {
+
+        const processId = ctx.params.processId;
+        if (processId == undefined) {
+            return ctx.response.body = Response.buildParamError('Process ID is required');
+        }
+
+        ctx.response.body = await ProcessService.restartById(processId);
+
+    }
+
+    @PostMapping({route: '/pm/process/restart'})
+    static async restartAll(ctx) {
+        ctx.response.body = await ProcessService.restartAll();
+    }
+
+    @PostMapping({route: '/pm/process/delete/:processId'})
+    static async delById(ctx) {
+
+        const processId = ctx.params.processId;
+        if (processId == undefined) {
+            return ctx.response.body = Response.buildParamError('Process ID is required');
+        }
+
+        ctx.response.body = await ProcessService.delById(processId);
+
+    }
+
+    @PostMapping({route: '/pm/process/delete'})
+    static async delAll(ctx) {
+        ctx.response.body = await ProcessService.delAll();
+    }
+
+    @PostMapping({route: '/pm/process/reload/:processId'})
+    static async reloadById(ctx) {
+
+        const processId = ctx.params.processId;
+        if (processId == undefined) {
+            return ctx.response.body = Response.buildParamError('Process ID is required');
+        }
+
+        ctx.response.body = await ProcessService.reloadById(processId);
+
+    }
+
+    @PostMapping({route: '/pm/process/reload'})
+    static async reloadAll(ctx) {
+        ctx.response.body = await ProcessService.reloadAll();
     }
 
 };
