@@ -65,7 +65,7 @@ function start(options) {
  * @param id
  * @returns {Promise<any>}
  */
-function stopById(id) {
+function pauseById(id) {
     return connect((resolve, reject) => {
         pm2.stop(id, (err, proc) => {
 
@@ -86,7 +86,7 @@ function stopById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-function stopAll() {
+function pauseAll() {
     return connect((resolve, reject) => {
         pm2.stop('all', (err, proc) => {
 
@@ -149,7 +149,7 @@ function restartAll() {
  * @param id
  * @returns {Promise<any>}
  */
-function delById(id) {
+function stopById(id) {
     return connect((resolve, reject) => {
         pm2.delete(id, (err, proc) => {
 
@@ -170,7 +170,7 @@ function delById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-function delAll() {
+function stopAll() {
     return connect((resolve, reject) => {
         pm2.delete('all', (err, proc) => {
 
@@ -232,12 +232,12 @@ export default {
     connect,
     list,
     start,
-    stopById,
-    stopAll,
+    pauseById,
+    pauseAll,
     restartById,
     restartAll,
-    delById,
-    delAll,
+    stopById,
+    stopAll,
     reloadById,
     reloadAll
 };
