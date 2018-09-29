@@ -52,6 +52,20 @@ async function start(options) {
     }
 };
 
+async function startByName(processName) {
+
+    const data = getProcessesConfig();
+    let index;
+
+    if (!data || data.length < 1
+        || (index = data.findIndex(item => item.name === processName) === -1)) {
+        return Response.buildParamError('Process Name Not Found');
+    }
+
+    return start(data[index]);
+
+};
+
 async function stopById(processId) {
     try {
         const proc = await stopById(processId);
@@ -127,6 +141,7 @@ async function reloadAll() {
 export default {
     getProcesses,
     start,
+    startByName,
     stopById,
     stopAll,
     restartById,
