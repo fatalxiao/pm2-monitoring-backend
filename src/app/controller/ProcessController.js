@@ -59,21 +59,21 @@ class ProcessController {
 
     }
 
-    @PutMapping({route: '/pm/process/stop/:processId'})
-    static async stopById(ctx) {
+    @PutMapping({route: '/pm/process/pause/:processId'})
+    static async pauseById(ctx) {
 
         const processId = ctx.params.processId;
         if (processId == undefined) {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.stopById(processId);
+        ctx.response.body = await ProcessService.pauseById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/stop'})
-    static async stopAll(ctx) {
-        ctx.response.body = await ProcessService.stopAll();
+    @PutMapping({route: '/pm/process/pause'})
+    static async pauseAll(ctx) {
+        ctx.response.body = await ProcessService.pauseAll();
     }
 
     @PutMapping({route: '/pm/process/restart/:processId'})
@@ -93,21 +93,21 @@ class ProcessController {
         ctx.response.body = await ProcessService.restartAll();
     }
 
-    @PutMapping({route: '/pm/process/delete/:processId'})
-    static async delById(ctx) {
+    @PutMapping({route: '/pm/process/stop/:processId'})
+    static async stopById(ctx) {
 
         const processId = ctx.params.processId;
         if (processId == undefined) {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.delById(processId);
+        ctx.response.body = await ProcessService.stopById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/delete'})
-    static async delAll(ctx) {
-        ctx.response.body = await ProcessService.delAll();
+    @PutMapping({route: '/pm/process/stop'})
+    static async stopAll(ctx) {
+        ctx.response.body = await ProcessService.stopAll();
     }
 
     @PutMapping({route: '/pm/process/reload/:processId'})
