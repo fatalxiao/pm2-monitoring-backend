@@ -28,7 +28,7 @@ function connect(callback) {
  * get pm2 list info
  * @returns {Promise<any>}
  */
-export function getPMList() {
+function list() {
     return new Promise((resolve, reject) => {
         pm2.list((err, processDescriptionList) => {
             if (err) {
@@ -44,7 +44,7 @@ export function getPMList() {
  * @param options
  * @returns {Promise<any>}
  */
-export function start(options) {
+function start(options) {
     return connect((resolve, reject) => {
         pm2.start(options, (err, proc) => {
 
@@ -65,7 +65,7 @@ export function start(options) {
  * @param id
  * @returns {Promise<any>}
  */
-export function stopById(id) {
+function stopById(id) {
     return connect((resolve, reject) => {
         pm2.stop(id, (err, proc) => {
 
@@ -86,7 +86,7 @@ export function stopById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-export function stopAll() {
+function stopAll() {
     return connect((resolve, reject) => {
         pm2.stop('all', (err, proc) => {
 
@@ -107,7 +107,7 @@ export function stopAll() {
  * @param id
  * @returns {Promise<any>}
  */
-export function restartById(id) {
+function restartById(id) {
     return connect((resolve, reject) => {
         pm2.restart(id, (err, proc) => {
 
@@ -128,7 +128,7 @@ export function restartById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-export function restartAll() {
+function restartAll() {
     return connect((resolve, reject) => {
         pm2.restart('all', (err, proc) => {
 
@@ -149,7 +149,7 @@ export function restartAll() {
  * @param id
  * @returns {Promise<any>}
  */
-export function delById(id) {
+function delById(id) {
     return connect((resolve, reject) => {
         pm2.delete(id, (err, proc) => {
 
@@ -170,7 +170,7 @@ export function delById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-export function delAll() {
+function delAll() {
     return connect((resolve, reject) => {
         pm2.delete('all', (err, proc) => {
 
@@ -191,7 +191,7 @@ export function delAll() {
  * @param id
  * @returns {Promise<any>}
  */
-export function reloadById(id) {
+function reloadById(id) {
     return connect((resolve, reject) => {
         pm2.reload(id, (err, proc) => {
 
@@ -212,7 +212,7 @@ export function reloadById(id) {
  * @param id
  * @returns {Promise<any>}
  */
-export function reloadAll() {
+function reloadAll() {
     return connect((resolve, reject) => {
         pm2.reload('all', (err, proc) => {
 
@@ -227,3 +227,17 @@ export function reloadAll() {
         });
     });
 }
+
+export default {
+    connect,
+    list,
+    start,
+    stopById,
+    stopAll,
+    restartById,
+    restartAll,
+    delById,
+    delAll,
+    reloadById,
+    reloadAll
+};
