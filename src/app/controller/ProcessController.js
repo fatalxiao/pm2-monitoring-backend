@@ -3,7 +3,7 @@ import path from 'path';
 
 import ProcessService from '../service/ProcessService.js';
 import Response from '../utils/Response.js';
-import {PostMapping, WsGetMapping} from '../utils/ApiDecorator';
+import {PutMapping, WsGetMapping, WsPostMapping} from '../utils/ApiDecorator';
 
 class ProcessController {
 
@@ -14,7 +14,7 @@ class ProcessController {
         });
     }
 
-    @WsGetMapping({route: '/pm/process/upload/:processName'})
+    @WsPostMapping({route: '/pm/process/upload/:processName'})
     static async uploadProcess(ctx) {
 
         const processName = ctx.params.processName;
@@ -47,7 +47,7 @@ class ProcessController {
     //
     // }
 
-    @PostMapping({route: '/pm/process/start/:processName'})
+    @PutMapping({route: '/pm/process/start/:processName'})
     static async startByName(ctx) {
 
         const processName = ctx.params.processName;
@@ -59,7 +59,7 @@ class ProcessController {
 
     }
 
-    @PostMapping({route: '/pm/process/stop/:processId'})
+    @PutMapping({route: '/pm/process/stop/:processId'})
     static async stopById(ctx) {
 
         const processId = ctx.params.processId;
@@ -71,12 +71,12 @@ class ProcessController {
 
     }
 
-    @PostMapping({route: '/pm/process/stop'})
+    @PutMapping({route: '/pm/process/stop'})
     static async stopAll(ctx) {
         ctx.response.body = await ProcessService.stopAll();
     }
 
-    @PostMapping({route: '/pm/process/restart/:processId'})
+    @PutMapping({route: '/pm/process/restart/:processId'})
     static async restartById(ctx) {
 
         const processId = ctx.params.processId;
@@ -88,12 +88,12 @@ class ProcessController {
 
     }
 
-    @PostMapping({route: '/pm/process/restart'})
+    @PutMapping({route: '/pm/process/restart'})
     static async restartAll(ctx) {
         ctx.response.body = await ProcessService.restartAll();
     }
 
-    @PostMapping({route: '/pm/process/delete/:processId'})
+    @PutMapping({route: '/pm/process/delete/:processId'})
     static async delById(ctx) {
 
         const processId = ctx.params.processId;
@@ -105,12 +105,12 @@ class ProcessController {
 
     }
 
-    @PostMapping({route: '/pm/process/delete'})
+    @PutMapping({route: '/pm/process/delete'})
     static async delAll(ctx) {
         ctx.response.body = await ProcessService.delAll();
     }
 
-    @PostMapping({route: '/pm/process/reload/:processId'})
+    @PutMapping({route: '/pm/process/reload/:processId'})
     static async reloadById(ctx) {
 
         const processId = ctx.params.processId;
@@ -122,7 +122,7 @@ class ProcessController {
 
     }
 
-    @PostMapping({route: '/pm/process/reload'})
+    @PutMapping({route: '/pm/process/reload'})
     static async reloadAll(ctx) {
         ctx.response.body = await ProcessService.reloadAll();
     }
