@@ -25,18 +25,18 @@ async function startByName(applicationName) {
 
 };
 
-async function pauseById(applicationId) {
+async function stopById(applicationId) {
     try {
-        const proc = await PMUtil.pauseById(applicationId);
+        const proc = await PMUtil.stopById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Stop Application Failed');
     }
 };
 
-async function pauseAll() {
+async function stopAll() {
     try {
-        const proc = await PMUtil.pauseAll();
+        const proc = await PMUtil.stopAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Stop Applicationes Failed');
@@ -61,18 +61,18 @@ async function restartAll() {
     }
 };
 
-async function stopById(applicationId) {
+async function deleteById(applicationId) {
     try {
-        const proc = await PMUtil.stopById(applicationId);
+        const proc = await PMUtil.deleteById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Delete Application Failed');
     }
 };
 
-async function stopAll() {
+async function deleteAll() {
     try {
-        const proc = await PMUtil.stopAll();
+        const proc = await PMUtil.deleteAll();
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Delete Applicationes Failed');
@@ -100,12 +100,12 @@ async function reloadAll() {
 export default {
     start,
     startByName,
-    pauseById,
-    pauseAll,
-    restartById,
-    restartAll,
     stopById,
     stopAll,
+    restartById,
+    restartAll,
+    deleteById,
+    deleteAll,
     reloadById,
     reloadAll
 };
