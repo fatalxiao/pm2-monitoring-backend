@@ -16,12 +16,18 @@
         "env": {
             "NODE_ENV": "production"
         },
+        "env_production": {
+            "NODE_ENV": "production"
+        },
         "description": "alcedo-ui development environment"
     },
     {
         "name": "alcedo-ui-testing",
         "script": "server.js",
         "env": {
+            "NODE_ENV": "production"
+        },
+        "env_production": {
             "NODE_ENV": "production"
         },
         "description": "alcedo-ui testing environment"
@@ -32,12 +38,18 @@
         "env": {
             "NODE_ENV": "production"
         },
+        "env_production": {
+            "NODE_ENV": "production"
+        },
         "description": "alcedo-ui demo environment"
     },
     {
         "name": "alcedo-ui-prod",
         "script": "server.js",
         "env": {
+            "NODE_ENV": "production"
+        },
+        "env_production": {
             "NODE_ENV": "production"
         },
         "description": "alcedo-ui production environment"
