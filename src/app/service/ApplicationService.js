@@ -1,43 +1,12 @@
 import Response from '../utils/Response.js';
-import {getProcessesConfig} from '../utils/ProcessUtil.js';
 import PMUtil from '../utils/PMUtil.js';
-
-async function getProcesses() {
-
-    const data = getProcessesConfig();
-
-    if (!data) {
-        return Response.buildSuccess([]);
-    }
-
-    try {
-
-        // get pm2 list data
-        const processList = await PMUtil.list();
-
-        return Response.buildSuccess(data.filter(item => item).map(item => {
-            const index = processList.findIndex(p => p && p.name === item.name);
-            return index === -1 ? item : {
-                ...item,
-                pid: processList[index].pid,
-                pm_id: processList[index].pm_id,
-                status: processList[index].pm2_env.status,
-                monit: processList[index].monit
-            };
-        }));
-
-    } catch (e) {
-        return Response.buildError('Get Process List Failed');
-    }
-
-};
 
 async function start(options) {
     try {
         const proc = await PMUtil.start(options);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Start Process Failed');
+        return Response.buildError('Start Application Failed');
     }
 };
 
@@ -48,7 +17,7 @@ async function startByName(processName) {
 
     if (!data || data.length < 1
         || (index = data.findIndex(item => item.name === processName)) === -1) {
-        return Response.buildParamError('Process Name Not Found');
+        return Response.buildParamError('Application Name Not Found');
     }
 
     return await start(data[index]);
@@ -60,7 +29,7 @@ async function pauseById(processId) {
         const proc = await PMUtil.pauseById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Stop Process Failed');
+        return Response.buildError('Stop Application Failed');
     }
 };
 
@@ -69,7 +38,7 @@ async function pauseAll() {
         const proc = await PMUtil.pauseAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Stop Processes Failed');
+        return Response.buildError('Stop Applicationes Failed');
     }
 };
 
@@ -78,7 +47,7 @@ async function restartById(processId) {
         const proc = await PMUtil.restartById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Restart Process Failed');
+        return Response.buildError('Restart Application Failed');
     }
 };
 
@@ -87,7 +56,7 @@ async function restartAll() {
         const proc = await PMUtil.restartAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Restart Processes Failed');
+        return Response.buildError('Restart Applicationes Failed');
     }
 };
 
@@ -96,7 +65,7 @@ async function stopById(processId) {
         const proc = await PMUtil.stopById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Delete Process Failed');
+        return Response.buildError('Delete Application Failed');
     }
 };
 
@@ -105,7 +74,7 @@ async function stopAll() {
         const proc = await PMUtil.stopAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Delete Processes Failed');
+        return Response.buildError('Delete Applicationes Failed');
     }
 };
 
@@ -114,7 +83,7 @@ async function reloadById(processId) {
         const proc = await PMUtil.reloadById(processId);
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Reload Process Failed');
+        return Response.buildError('Reload Application Failed');
     }
 };
 
@@ -123,12 +92,11 @@ async function reloadAll() {
         const proc = await PMUtil.reloadAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Reload Processes Failed');
+        return Response.buildError('Reload Applicationes Failed');
     }
 };
 
 export default {
-    getProcesses,
     start,
     startByName,
     pauseById,
