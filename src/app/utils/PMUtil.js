@@ -26,17 +26,17 @@ function connect(callback) {
  */
 function list() {
     return new Promise((resolve, reject) => {
-        pm2.list((err, processDescriptionList) => {
+        pm2.list((err, descriptionList) => {
             if (err) {
                 reject(err);
             }
-            resolve(processDescriptionList);
+            resolve(descriptionList);
         });
     });
 }
 
 /**
- * start app process
+ * start app application
  * @param options
  * @returns {Promise<any>}
  */
@@ -66,11 +66,11 @@ function start(options) {
 }
 
 /**
- * stop app process by process id
+ * stop application by application id
  * @param id
  * @returns {Promise<any>}
  */
-function pauseById(id) {
+function stopById(id) {
 
     if (id == undefined) {
         return;
@@ -93,11 +93,11 @@ function pauseById(id) {
 }
 
 /**
- * stop all app processes
+ * stop all app applications
  * @param id
  * @returns {Promise<any>}
  */
-function pauseAll() {
+function stopAll() {
     return connect((resolve, reject) => {
         pm2.stop('all', (err, proc) => {
 
@@ -114,7 +114,7 @@ function pauseAll() {
 }
 
 /**
- * restart app process by process id
+ * restart application by id
  * @param id
  * @returns {Promise<any>}
  */
@@ -141,7 +141,7 @@ function restartById(id) {
 }
 
 /**
- * restart all app processes
+ * restart all app applications
  * @param id
  * @returns {Promise<any>}
  */
@@ -162,11 +162,11 @@ function restartAll() {
 }
 
 /**
- * delete app process by process id
+ * delete application by id
  * @param id
  * @returns {Promise<any>}
  */
-function stopById(id) {
+function deleteById(id) {
 
     if (id == undefined) {
         return;
@@ -189,11 +189,11 @@ function stopById(id) {
 }
 
 /**
- * delete all app processes
+ * delete all app applications
  * @param id
  * @returns {Promise<any>}
  */
-function stopAll() {
+function deleteAll() {
     return connect((resolve, reject) => {
         pm2.delete('all', (err, proc) => {
 
@@ -210,7 +210,7 @@ function stopAll() {
 }
 
 /**
- * reload app process by process id
+ * reload application by id
  * @param id
  * @returns {Promise<any>}
  */
@@ -237,7 +237,7 @@ function reloadById(id) {
 }
 
 /**
- * reload all app processes
+ * reload all app applications
  * @param id
  * @returns {Promise<any>}
  */
@@ -261,12 +261,12 @@ export default {
     connect,
     list,
     start,
-    pauseById,
-    pauseAll,
-    restartById,
-    restartAll,
     stopById,
     stopAll,
+    restartById,
+    restartAll,
+    deleteById,
+    deleteAll,
     reloadById,
     reloadAll
 };
