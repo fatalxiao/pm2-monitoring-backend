@@ -1,5 +1,6 @@
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
+import {getApplicationsConfig} from '../utils/ApplicationsUtil.js';
 
 async function start(options) {
     try {
@@ -10,13 +11,13 @@ async function start(options) {
     }
 };
 
-async function startByName(processName) {
+async function startByName(applicationName) {
 
-    const data = getProcessesConfig();
+    const data = getApplicationsConfig();
     let index;
 
     if (!data || data.length < 1
-        || (index = data.findIndex(item => item.name === processName)) === -1) {
+        || (index = data.findIndex(item => item.name === applicationName)) === -1) {
         return Response.buildParamError('Application Name Not Found');
     }
 
@@ -24,9 +25,9 @@ async function startByName(processName) {
 
 };
 
-async function pauseById(processId) {
+async function pauseById(applicationId) {
     try {
-        const proc = await PMUtil.pauseById(processId);
+        const proc = await PMUtil.pauseById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Stop Application Failed');
@@ -42,9 +43,9 @@ async function pauseAll() {
     }
 };
 
-async function restartById(processId) {
+async function restartById(applicationId) {
     try {
-        const proc = await PMUtil.restartById(processId);
+        const proc = await PMUtil.restartById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Restart Application Failed');
@@ -60,9 +61,9 @@ async function restartAll() {
     }
 };
 
-async function stopById(processId) {
+async function stopById(applicationId) {
     try {
-        const proc = await PMUtil.stopById(processId);
+        const proc = await PMUtil.stopById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Delete Application Failed');
@@ -78,9 +79,9 @@ async function stopAll() {
     }
 };
 
-async function reloadById(processId) {
+async function reloadById(applicationId) {
     try {
-        const proc = await PMUtil.reloadById(processId);
+        const proc = await PMUtil.reloadById(applicationId);
         return Response.buildSuccess(proc);
     } catch (e) {
         return Response.buildError('Reload Application Failed');
