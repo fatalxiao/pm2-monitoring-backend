@@ -1,20 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
-import ProcessService from '../service/ProcessService.js';
+import ApplicationService from '../service/ApplicationService.js';
 import Response from '../utils/Response.js';
-import {PutMapping, WsGetMapping, WsPostMapping} from '../utils/ApiDecorator';
+import {PutMapping, WsPostMapping} from '../utils/ApiDecorator';
 
-class ProcessController {
+class ApplicationController {
 
-    @WsGetMapping({route: '/pm/processes'})
-    static async getProcesses(ctx) {
-        ctx.websocket.on('message', () => {
-            ProcessService.getProcesses().then(data => ctx.websocket.send(data));
-        });
-    }
-
-    @WsPostMapping({route: '/pm/process/upload/:processName'})
+    @WsPostMapping({route: '/pm/application/upload/:processName'})
     static async uploadProcess(ctx) {
 
         const processName = ctx.params.processName;
@@ -29,7 +22,7 @@ class ProcessController {
 
     }
 
-    // @PostMapping({route: '/pm/process/upload/:processName'})
+    // @PostMapping({route: '/pm/application/upload/:processName'})
     // static async uploadProcess(ctx) {
     //
     //     const processName = ctx.params.processName;
@@ -43,11 +36,11 @@ class ProcessController {
     //         return ctx.response.body = Response.buildParamError('Process Package is required');
     //     }
     //
-    //     ctx.response.body = await ProcessService.uploadProcess(processName, ctx.request.body.files.file);
+    //     ctx.response.body = await ApplicationService.uploadProcess(processName, ctx.request.body.files.file);
     //
     // }
 
-    @PutMapping({route: '/pm/process/start/:processName'})
+    @PutMapping({route: '/pm/application/start/:processName'})
     static async startByName(ctx) {
 
         const processName = ctx.params.processName;
@@ -55,11 +48,11 @@ class ProcessController {
             return ctx.response.body = Response.buildParamError('Process Name is required');
         }
 
-        ctx.response.body = await ProcessService.startByName(processName);
+        ctx.response.body = await ApplicationService.startByName(processName);
 
     }
 
-    @PutMapping({route: '/pm/process/pause/:processId'})
+    @PutMapping({route: '/pm/application/pause/:processId'})
     static async pauseById(ctx) {
 
         const processId = ctx.params.processId;
@@ -67,16 +60,16 @@ class ProcessController {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.pauseById(processId);
+        ctx.response.body = await ApplicationService.pauseById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/pause'})
+    @PutMapping({route: '/pm/application/pause'})
     static async pauseAll(ctx) {
-        ctx.response.body = await ProcessService.pauseAll();
+        ctx.response.body = await ApplicationService.pauseAll();
     }
 
-    @PutMapping({route: '/pm/process/restart/:processId'})
+    @PutMapping({route: '/pm/application/restart/:processId'})
     static async restartById(ctx) {
 
         const processId = ctx.params.processId;
@@ -84,16 +77,16 @@ class ProcessController {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.restartById(processId);
+        ctx.response.body = await ApplicationService.restartById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/restart'})
+    @PutMapping({route: '/pm/application/restart'})
     static async restartAll(ctx) {
-        ctx.response.body = await ProcessService.restartAll();
+        ctx.response.body = await ApplicationService.restartAll();
     }
 
-    @PutMapping({route: '/pm/process/stop/:processId'})
+    @PutMapping({route: '/pm/application/stop/:processId'})
     static async stopById(ctx) {
 
         const processId = ctx.params.processId;
@@ -101,16 +94,16 @@ class ProcessController {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.stopById(processId);
+        ctx.response.body = await ApplicationService.stopById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/stop'})
+    @PutMapping({route: '/pm/application/stop'})
     static async stopAll(ctx) {
-        ctx.response.body = await ProcessService.stopAll();
+        ctx.response.body = await ApplicationService.stopAll();
     }
 
-    @PutMapping({route: '/pm/process/reload/:processId'})
+    @PutMapping({route: '/pm/application/reload/:processId'})
     static async reloadById(ctx) {
 
         const processId = ctx.params.processId;
@@ -118,15 +111,15 @@ class ProcessController {
             return ctx.response.body = Response.buildParamError('Process ID is required');
         }
 
-        ctx.response.body = await ProcessService.reloadById(processId);
+        ctx.response.body = await ApplicationService.reloadById(processId);
 
     }
 
-    @PutMapping({route: '/pm/process/reload'})
+    @PutMapping({route: '/pm/application/reload'})
     static async reloadAll(ctx) {
-        ctx.response.body = await ProcessService.reloadAll();
+        ctx.response.body = await ApplicationService.reloadAll();
     }
 
 };
 
-export default ProcessController;
+export default ApplicationController;
