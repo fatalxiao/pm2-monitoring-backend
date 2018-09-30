@@ -1,9 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 
-export function getProcessesConfig() {
+export function getApplicationsConfig() {
 
-    const json = fs.readFileSync(path.resolve(__dirname, '../../processes.json'));
+    const json = fs.readFileSync(path.resolve(__dirname, '../../applications.json'));
 
     if (!json) {
         return;
@@ -17,6 +17,6 @@ export function getProcessesConfig() {
 
 }
 
-export function setProcessesConfig(json) {
+export function setApplicationsConfig(json) {
 
 }
