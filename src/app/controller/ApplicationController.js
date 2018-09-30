@@ -7,94 +7,60 @@ import {PutMapping, WsPostMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
 
-    @WsPostMapping({route: '/pm/application/upload/:processName'})
-    static async uploadProcess(ctx) {
+    @WsPostMapping({route: '/pm/application/upload/:applicationName'})
+    static async uploadApplication(ctx) {
 
-        const processName = ctx.params.processName;
-        if (processName == undefined) {
-            return ctx.websocket.send(Response.buildParamError('Process Name is required'));
+        const applicationName = ctx.params.applicationName;
+        if (applicationName == undefined) {
+            return ctx.websocket.send(Response.buildParamError('Application Name is required'));
         }
 
         ctx.websocket.on('message', message => {
-            fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${processName}.zip`), message);
+            fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${applicationName}.zip`), message);
             return ctx.websocket.send(Response.buildSuccess());
         });
 
     }
 
-    // @PostMapping({route: '/pm/application/upload/:processName'})
-    // static async uploadProcess(ctx) {
+    // @PostMapping({route: '/pm/application/upload/:applicationName'})
+    // static async uploadApplication(ctx) {
     //
-    //     const processName = ctx.params.processName;
-    //     if (!processName) {
-    //         return ctx.response.body = Response.buildParamError('Process Name is required');
+    //     const applicationName = ctx.params.applicationName;
+    //     if (!applicationName) {
+    //         return ctx.response.body = Response.buildParamError('Application Name is required');
     //     }
     //
     //     console.log(ctx.request.body);
     //
     //     if (!ctx.request.body || !ctx.request.body.files || !ctx.request.body.files.file) {
-    //         return ctx.response.body = Response.buildParamError('Process Package is required');
+    //         return ctx.response.body = Response.buildParamError('Application Package is required');
     //     }
     //
-    //     ctx.response.body = await ApplicationService.uploadProcess(processName, ctx.request.body.files.file);
+    //     ctx.response.body = await ApplicationService.uploadApplication(applicationName, ctx.request.body.files.file);
     //
     // }
 
-    @PutMapping({route: '/pm/application/start/:processName'})
+    @PutMapping({route: '/pm/application/start/:applicationName'})
     static async startByName(ctx) {
 
-        const processName = ctx.params.processName;
-        if (processName == undefined) {
-            return ctx.response.body = Response.buildParamError('Process Name is required');
+        const applicationName = ctx.params.applicationName;
+        if (applicationName == undefined) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
         }
 
-        ctx.response.body = await ApplicationService.startByName(processName);
+        ctx.response.body = await ApplicationService.startByName(applicationName);
 
     }
 
-    @PutMapping({route: '/pm/application/pause/:processId'})
-    static async pauseById(ctx) {
-
-        const processId = ctx.params.processId;
-        if (processId == undefined) {
-            return ctx.response.body = Response.buildParamError('Process ID is required');
-        }
-
-        ctx.response.body = await ApplicationService.pauseById(processId);
-
-    }
-
-    @PutMapping({route: '/pm/application/pause'})
-    static async pauseAll(ctx) {
-        ctx.response.body = await ApplicationService.pauseAll();
-    }
-
-    @PutMapping({route: '/pm/application/restart/:processId'})
-    static async restartById(ctx) {
-
-        const processId = ctx.params.processId;
-        if (processId == undefined) {
-            return ctx.response.body = Response.buildParamError('Process ID is required');
-        }
-
-        ctx.response.body = await ApplicationService.restartById(processId);
-
-    }
-
-    @PutMapping({route: '/pm/application/restart'})
-    static async restartAll(ctx) {
-        ctx.response.body = await ApplicationService.restartAll();
-    }
-
-    @PutMapping({route: '/pm/application/stop/:processId'})
+    @PutMapping({route: '/pm/application/stop/:applicationId'})
     static async stopById(ctx) {
 
-        const processId = ctx.params.processId;
-        if (processId == undefined) {
-            return ctx.response.body = Response.buildParamError('Process ID is required');
+        const applicationId = ctx.params.applicationId;
+        if (applicationId == undefined) {
+            return ctx.response.body = Response.buildParamError('Application ID is required');
         }
 
-        ctx.response.body = await ApplicationService.stopById(processId);
+        ctx.response.body = await ApplicationService.stopById(applicationId);
 
     }
 
@@ -103,15 +69,49 @@ class ApplicationController {
         ctx.response.body = await ApplicationService.stopAll();
     }
 
-    @PutMapping({route: '/pm/application/reload/:processId'})
-    static async reloadById(ctx) {
+    @PutMapping({route: '/pm/application/restart/:applicationId'})
+    static async restartById(ctx) {
 
-        const processId = ctx.params.processId;
-        if (processId == undefined) {
-            return ctx.response.body = Response.buildParamError('Process ID is required');
+        const applicationId = ctx.params.applicationId;
+        if (applicationId == undefined) {
+            return ctx.response.body = Response.buildParamError('Application ID is required');
         }
 
-        ctx.response.body = await ApplicationService.reloadById(processId);
+        ctx.response.body = await ApplicationService.restartById(applicationId);
+
+    }
+
+    @PutMapping({route: '/pm/application/restart'})
+    static async restartAll(ctx) {
+        ctx.response.body = await ApplicationService.restartAll();
+    }
+
+    @PutMapping({route: '/pm/application/delete/:applicationId'})
+    static async deleteById(ctx) {
+
+        const applicationId = ctx.params.applicationId;
+        if (applicationId == undefined) {
+            return ctx.response.body = Response.buildParamError('Application ID is required');
+        }
+
+        ctx.response.body = await ApplicationService.deleteById(applicationId);
+
+    }
+
+    @PutMapping({route: '/pm/application/delete'})
+    static async deleteAll(ctx) {
+        ctx.response.body = await ApplicationService.deleteAll();
+    }
+
+    @PutMapping({route: '/pm/application/reload/:applicationId'})
+    static async reloadById(ctx) {
+
+        const applicationId = ctx.params.applicationId;
+        if (applicationId == undefined) {
+            return ctx.response.body = Response.buildParamError('Application ID is required');
+        }
+
+        ctx.response.body = await ApplicationService.reloadById(applicationId);
 
     }
 
