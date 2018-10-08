@@ -3,7 +3,7 @@ import path from 'path';
 
 import ApplicationService from '../service/ApplicationService.js';
 import Response from '../utils/Response.js';
-import {PutMapping, WsPostMapping} from '../utils/ApiDecorator';
+import {PostMapping, PutMapping, WsPostMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
 
@@ -39,6 +39,18 @@ class ApplicationController {
     //     ctx.response.body = await ApplicationService.uploadApplication(applicationName, ctx.request.body.files.file);
     //
     // }
+
+    @PostMapping({route: '/pm/application/create'})
+    static async create(ctx) {
+
+        const requestData = ctx.request.body;
+        if (!requestData.name) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
+        }
+
+        ctx.response.body = await ApplicationService.create(requestData);
+
+    }
 
     @PutMapping({route: '/pm/application/start/:applicationName'})
     static async startByName(ctx) {
