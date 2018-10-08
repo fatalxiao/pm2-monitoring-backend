@@ -2,6 +2,10 @@ import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
 import ApplicationsUtil from '../utils/ApplicationsUtil.js';
 
+async function upload(applicationName, file) {
+
+};
+
 async function create(config) {
     try {
 
@@ -115,6 +119,7 @@ async function reloadAll() {
 };
 
 export default {
+    upload,
     create,
     start,
     startByName,
