@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import FsUtil from './FsUtil';
 import {exec} from 'child_process';
+import yauzl from 'yauzl';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
 
@@ -137,6 +138,62 @@ function hasPackage(name) {
 
 }
 
+function rmPackage(name) {
+
+    if (!name || !hasPackage(name)) {
+        return;
+    }
+
+    FsUtil.rmRecursionSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
+
+}
+
+function savePackage(name, file) {
+
+    const reader = fs.createReadStream(file.path),
+        filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+        writer = fs.createWriteStream(filePath);
+
+    reader.pipe(writer);
+
+}
+
+function decompressPackage(name, file) {
+
+    if (!name || !file) {
+        return;
+    }
+
+    rmPackage(name);
+
+    yauzl.open(path.resolve(__dirname, `../../pm2-apps/${name}.zip`), (err, zipfile) => {
+
+        if (err) {
+            throw err;
+        }
+
+        zipfile.on('error', err => {
+            throw err;
+        });
+
+        zipfile.on('entry', entry => {
+
+            if (!dumpContents || /\/$/.exec(entry)) {
+                return;
+            }
+
+            zipfile.openReadStream(entry, (err, readStream) => {
+                if (err) {
+                    throw err;
+                }
+                readStream.pipe(path.resolve(__dirname, '../../pm2-apps'));
+            });
+
+        });
+    });
+
+}
+
 /**
  * install node dependencies
  */
@@ -163,6 +220,8 @@ export default {
     isNameExist,
     appendConfig,
     hasPackage,
+    savePackage,
+    decompressPackage,
     installDependencies
 
 };
