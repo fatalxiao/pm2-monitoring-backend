@@ -4,6 +4,10 @@ import {exec} from 'child_process';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
 
+/**
+ * default application config
+ * @type {{name: string, description: string, instances: number, script: string, port: string, env: string, envProd: string}}
+ */
 export const DEFAULT_CONFIG = {
     name: '',
     description: '',
@@ -14,6 +18,11 @@ export const DEFAULT_CONFIG = {
     envProd: ''
 };
 
+/**
+ * format config to pm2 option
+ * @param config
+ * @returns {{name: *, script: *, instances: (Array|number), port: *, env: {NODE_ENV: *}, env_production: {NODE_ENV: (string|string)}, description: string | string | *}}
+ */
 export function formatConfig(config) {
 
     if (!config) {
@@ -38,6 +47,10 @@ export function formatConfig(config) {
 
 }
 
+/**
+ * read applications config in file <applications.json>
+ * @returns {any}
+ */
 export function getApplicationsConfig() {
 
     try {
@@ -56,6 +69,10 @@ export function getApplicationsConfig() {
 
 }
 
+/**
+ * write applications config to file <applications.json>
+ * @param config
+ */
 export function setApplicationsConfig(config) {
 
     if (!config) {
@@ -70,6 +87,11 @@ export function setApplicationsConfig(config) {
 
 }
 
+/**
+ * append new application config
+ * @param config
+ * @returns {*|void}
+ */
 export function appendApplicationConfig(config) {
 
     if (!config) {
@@ -91,6 +113,9 @@ export function appendApplicationConfig(config) {
 
 }
 
+/**
+ * install node dependencies
+ */
 export function installDependencies() {
     exec('npm i -d', {
         cwd: path.resolve(__dirname, '../../pm2-apps/alcedo-ui/')
