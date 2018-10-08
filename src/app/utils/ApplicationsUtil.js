@@ -2,23 +2,92 @@ import path from 'path';
 import fs from 'fs';
 import {exec} from 'child_process';
 
-export function getApplicationsConfig() {
+const filePath = path.resolve(__dirname, '../../applications.json');
 
-    const json = fs.readFileSync(path.resolve(__dirname, '../../applications.json'));
+export const DEFAULT_CONFIG = {
+    name: '',
+    description: '',
+    instances: 1,
+    script: '',
+    port: '',
+    env: '',
+    envProd: ''
+};
 
-    if (!json) {
+export function formatConfig(config) {
+
+    if (!config) {
         return;
     }
 
+    const finalConfig = {...DEFAULT_CONFIG, ...config};
+
+    return {
+        name: finalConfig.name,
+        script: finalConfig.script,
+        instances: finalConfig.instances,
+        port: finalConfig.port,
+        env: {
+            NODE_ENV: finalConfig.env
+        },
+        env_production: {
+            NODE_ENV: finalConfig.envProd
+        },
+        description: finalConfig.description
+    };
+
+}
+
+export function getApplicationsConfig() {
+
     try {
+
+        const json = fs.readFileSync(filePath);
+
+        if (!json) {
+            return;
+        }
+
         return JSON.parse(json);
+
     } catch (e) {
         return;
     }
 
 }
 
-export function setApplicationsConfig(json) {
+export function setApplicationsConfig(config) {
+
+    if (!config) {
+        return;
+    }
+
+    try {
+        return fs.writeFileSync(filePath, JSON.stringify(config));
+    } catch (e) {
+        return;
+    }
+
+}
+
+export function appendApplicationConfig(config) {
+
+    if (!config) {
+        return;
+    }
+
+    const json = fs.readFileSync(filePath);
+    let applications;
+
+    try {
+        applications = JSON.parse(json);
+    } catch (e) {
+        applications = [];
+    }
+
+    applications.push(formatConfig(config));
+
+    return setApplicationsConfig(applications);
 
 }
 
