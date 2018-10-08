@@ -1,6 +1,15 @@
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
-import {getApplicationsConfig} from '../utils/ApplicationsUtil.js';
+import {getApplicationsConfig, appendApplicationConfig} from '../utils/ApplicationsUtil.js';
+
+async function create(config) {
+    try {
+        const proc = await appendApplicationConfig(config);
+        return Response.buildSuccess(proc);
+    } catch (e) {
+        return Response.buildError('Create Application Failed');
+    }
+};
 
 async function start(options) {
     try {
@@ -98,6 +107,7 @@ async function reloadAll() {
 };
 
 export default {
+    create,
     start,
     startByName,
     stopById,
