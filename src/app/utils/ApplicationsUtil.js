@@ -172,14 +172,21 @@ function decompressPackage(name, file) {
         return;
     }
 
-    rmPackage(name);
+    return new Promise(resolve => {
 
-    const filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
-        reader = fs.createReadStream(filePath);
+        rmPackage(name);
 
-    reader.pipe(unzip.Extract({
-        path: path.resolve(__dirname, `../../pm2-apps/${name}/`)
-    }));
+        const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
+            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+            reader = fs.createReadStream(filePath);
+
+        reader.pipe(unzip.Extract({
+            path: dirPath
+        }).on('close', () => {
+            resolve();
+        }));
+
+    });
 
 }
 
