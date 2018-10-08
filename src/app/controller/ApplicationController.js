@@ -7,38 +7,36 @@ import {PostMapping, PutMapping, WsPostMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
 
-    @WsPostMapping({route: '/pm/application/upload/:applicationName'})
-    static async uploadApplication(ctx) {
-
-        const applicationName = ctx.params.applicationName;
-        if (applicationName == undefined) {
-            return ctx.websocket.send(Response.buildParamError('Application Name is required'));
-        }
-
-        ctx.websocket.on('message', message => {
-            fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${applicationName}.zip`), message);
-            return ctx.websocket.send(Response.buildSuccess());
-        });
-
-    }
-
-    // @PostMapping({route: '/pm/application/upload/:applicationName'})
+    // @WsPostMapping({route: '/pm/application/upload/:applicationName'})
     // static async uploadApplication(ctx) {
     //
     //     const applicationName = ctx.params.applicationName;
-    //     if (!applicationName) {
-    //         return ctx.response.body = Response.buildParamError('Application Name is required');
+    //     if (applicationName == undefined) {
+    //         return ctx.websocket.send(Response.buildParamError('Application Name is required'));
     //     }
     //
-    //     console.log(ctx.request.body);
-    //
-    //     if (!ctx.request.body || !ctx.request.body.files || !ctx.request.body.files.file) {
-    //         return ctx.response.body = Response.buildParamError('Application Package is required');
-    //     }
-    //
-    //     ctx.response.body = await ApplicationService.uploadApplication(applicationName, ctx.request.body.files.file);
+    //     ctx.websocket.on('message', message => {
+    //         fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${applicationName}.zip`), message);
+    //         return ctx.websocket.send(Response.buildSuccess());
+    //     });
     //
     // }
+
+    @PostMapping({route: '/pm/application/upload/:applicationName', upload: true})
+    static async uploadApplication(ctx) {
+
+        const applicationName = ctx.params.applicationName;
+        if (!applicationName) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
+        }
+
+        if (!ctx.request.files || !ctx.request.files.file) {
+            return ctx.response.body = Response.buildParamError('Application Package is required');
+        }
+
+        ctx.response.body = await ApplicationService.upload(applicationName, ctx.request.files.file);
+
+    }
 
     @PostMapping({route: '/pm/application/create'})
     static async create(ctx) {
