@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs';
+import FsUtil from './FsUtil';
 import {exec} from 'child_process';
+import unzip from 'unzip-stream';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
 
@@ -51,7 +53,7 @@ function formatConfig(config) {
  * read applications config in file <applications.json>
  * @returns {any}
  */
-function getApplicationsConfig() {
+function getConfigs() {
 
     try {
 
@@ -73,7 +75,7 @@ function getApplicationsConfig() {
  * write applications config to file <applications.json>
  * @param config
  */
-function setApplicationsConfig(config) {
+function setConfigs(config) {
 
     if (!config) {
         return;
@@ -87,13 +89,13 @@ function setApplicationsConfig(config) {
 
 }
 
-function isApplicationNameExist(name) {
+function isNameExist(name) {
 
     if (!name) {
         return false;
     }
 
-    const applications = getApplicationsConfig();
+    const applications = getConfigs();
 
     if (!applications || applications.length < 1) {
         return false;
@@ -108,16 +110,83 @@ function isApplicationNameExist(name) {
  * @param config
  * @returns {*|void}
  */
-function appendApplicationConfig(config) {
+function appendConfig(config) {
 
     if (!config || !config.name) {
         return;
     }
 
-    const applications = getApplicationsConfig();
+    const applications = getConfigs();
     applications.push(formatConfig(config));
 
-    return setApplicationsConfig(applications);
+    return setConfigs(applications);
+
+}
+
+/**
+ * check the application has package or not
+ * @param name
+ * @returns {boolean}
+ */
+function hasPackage(name) {
+
+    if (!name) {
+        return false;
+    }
+
+    return FsUtil.isExistSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
+
+}
+
+function rmPackage(name) {
+
+    if (!name || !hasPackage(name)) {
+        return;
+    }
+
+    FsUtil.rmRecursionSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
+
+}
+
+function savePackage(name, file) {
+
+    return new Promise(resolve => {
+
+        const reader = fs.createReadStream(file.path),
+            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+            writer = fs.createWriteStream(filePath);
+
+        writer.on('close', () => {
+            resolve();
+        });
+
+        reader.pipe(writer);
+
+    });
+
+}
+
+function decompressPackage(name, file) {
+
+    if (!name || !file) {
+        return;
+    }
+
+    return new Promise(resolve => {
+
+        rmPackage(name);
+
+        const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
+            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+            reader = fs.createReadStream(filePath);
+
+        reader.pipe(unzip.Extract({
+            path: dirPath
+        }).on('close', () => {
+            resolve();
+        }));
+
+    });
 
 }
 
@@ -142,10 +211,13 @@ export default {
     DEFAULT_CONFIG,
 
     formatConfig,
-    getApplicationsConfig,
-    setApplicationsConfig,
-    isApplicationNameExist,
-    appendApplicationConfig,
+    getConfigs,
+    setConfigs,
+    isNameExist,
+    appendConfig,
+    hasPackage,
+    savePackage,
+    decompressPackage,
     installDependencies
 
 };

@@ -2,16 +2,30 @@ import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
 import ApplicationsUtil from '../utils/ApplicationsUtil.js';
 
+async function upload(applicationName, file) {
+    try {
+
+        await ApplicationsUtil.savePackage(applicationName, file);
+        await ApplicationsUtil.decompressPackage(applicationName, file);
+
+        return Response.buildSuccess('');
+
+    } catch (e) {
+        console.log(e);
+        return Response.buildError('Upload Application Failed');
+    }
+};
+
 async function create(config) {
     try {
 
-        if (ApplicationsUtil.isApplicationNameExist(config.name)) {
+        if (ApplicationsUtil.isNameExist(config.name)) {
             return Response.buildParamError({
                 name: 'Application Name is duplicated'
             });
         }
 
-        const proc = await ApplicationsUtil.appendApplicationConfig(config);
+        const proc = await ApplicationsUtil.appendConfig(config);
         return Response.buildSuccess(proc);
 
     } catch (e) {
@@ -30,7 +44,7 @@ async function start(options) {
 
 async function startByName(applicationName) {
 
-    const data = ApplicationsUtil.getApplicationsConfig();
+    const data = ApplicationsUtil.getConfigs();
     let index;
 
     if (!data || data.length < 1
@@ -115,6 +129,7 @@ async function reloadAll() {
 };
 
 export default {
+    upload,
     create,
     start,
     startByName,
