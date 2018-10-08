@@ -11,6 +11,7 @@ async function upload(applicationName, file) {
         return Response.buildSuccess('');
 
     } catch (e) {
+        console.log(e);
         return Response.buildError('Upload Application Failed');
     }
 };
