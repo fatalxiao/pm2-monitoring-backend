@@ -3,7 +3,6 @@ import fs from 'fs';
 import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 import unzip from 'unzip-stream';
-// import yauzl from 'yauzl';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
 
@@ -175,33 +174,11 @@ function decompressPackage(name, file) {
 
     rmPackage(name);
 
-    // yauzl.open(path.resolve(__dirname, `../../pm2-apps/${name}.zip`), (err, zipfile) => {
-    //
-    //     if (err) {
-    //         throw err;
-    //     }
-    //
-    //     zipfile.on('error', err => {
-    //         throw err;
-    //     });
-    //
-    //     zipfile.on('entry', entry => {
-    //         zipfile.openReadStream(entry, (err, readStream) => {
-    //             if (err) {
-    //                 throw err;
-    //             }
-    //             const filePath = path.resolve(__dirname, `../../pm2-apps/${name}`),
-    //                 writer = fs.createWriteStream(filePath);
-    //             readStream.pipe(writer);
-    //         });
-    //     });
-    // });
-
     const filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
         reader = fs.createReadStream(filePath);
 
     reader.pipe(unzip.Extract({
-        path: path.resolve(__dirname, `../../pm2-apps`)
+        path: path.resolve(__dirname, `../../pm2-apps/${name}/`)
     }));
 
 }
