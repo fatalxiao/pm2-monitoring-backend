@@ -1,11 +1,19 @@
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
-import {getApplicationsConfig, appendApplicationConfig} from '../utils/ApplicationsUtil.js';
+import ApplicationsUtil from '../utils/ApplicationsUtil.js';
 
 async function create(config) {
     try {
-        const proc = await appendApplicationConfig(config);
+
+        if (ApplicationsUtil.isApplicationNameExist(config.name)) {
+            return Response.buildParamError({
+                name: 'Application Name is duplicated'
+            });
+        }
+
+        const proc = await ApplicationsUtil.appendApplicationConfig(config);
         return Response.buildSuccess(proc);
+
     } catch (e) {
         return Response.buildError('Create Application Failed');
     }
@@ -22,7 +30,7 @@ async function start(options) {
 
 async function startByName(applicationName) {
 
-    const data = getApplicationsConfig();
+    const data = ApplicationsUtil.getApplicationsConfig();
     let index;
 
     if (!data || data.length < 1
