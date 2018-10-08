@@ -2,7 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import FsUtil from './FsUtil';
 import {exec} from 'child_process';
-import yauzl from 'yauzl';
+import unzip from 'unzip-stream';
+// import yauzl from 'yauzl';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
 
@@ -150,11 +151,19 @@ function rmPackage(name) {
 
 function savePackage(name, file) {
 
-    const reader = fs.createReadStream(file.path),
-        filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
-        writer = fs.createWriteStream(filePath);
+    return new Promise(resolve => {
 
-    reader.pipe(writer);
+        const reader = fs.createReadStream(file.path),
+            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+            writer = fs.createWriteStream(filePath);
+
+        writer.on('close', () => {
+            resolve();
+        });
+
+        reader.pipe(writer);
+
+    });
 
 }
 
@@ -166,31 +175,34 @@ function decompressPackage(name, file) {
 
     rmPackage(name);
 
-    yauzl.open(path.resolve(__dirname, `../../pm2-apps/${name}.zip`), (err, zipfile) => {
+    // yauzl.open(path.resolve(__dirname, `../../pm2-apps/${name}.zip`), (err, zipfile) => {
+    //
+    //     if (err) {
+    //         throw err;
+    //     }
+    //
+    //     zipfile.on('error', err => {
+    //         throw err;
+    //     });
+    //
+    //     zipfile.on('entry', entry => {
+    //         zipfile.openReadStream(entry, (err, readStream) => {
+    //             if (err) {
+    //                 throw err;
+    //             }
+    //             const filePath = path.resolve(__dirname, `../../pm2-apps/${name}`),
+    //                 writer = fs.createWriteStream(filePath);
+    //             readStream.pipe(writer);
+    //         });
+    //     });
+    // });
 
-        if (err) {
-            throw err;
-        }
+    const filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+        reader = fs.createReadStream(filePath);
 
-        zipfile.on('error', err => {
-            throw err;
-        });
-
-        zipfile.on('entry', entry => {
-
-            if (!dumpContents || /\/$/.exec(entry)) {
-                return;
-            }
-
-            zipfile.openReadStream(entry, (err, readStream) => {
-                if (err) {
-                    throw err;
-                }
-                readStream.pipe(path.resolve(__dirname, '../../pm2-apps'));
-            });
-
-        });
-    });
+    reader.pipe(unzip.Extract({
+        path: path.resolve(__dirname, `../../pm2-apps`)
+    }));
 
 }
 
