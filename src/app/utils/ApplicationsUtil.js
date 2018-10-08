@@ -8,7 +8,7 @@ const filePath = path.resolve(__dirname, '../../applications.json');
  * default application config
  * @type {{name: string, description: string, instances: number, script: string, port: string, env: string, envProd: string}}
  */
-export const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG = {
     name: '',
     description: '',
     instances: 1,
@@ -23,7 +23,7 @@ export const DEFAULT_CONFIG = {
  * @param config
  * @returns {{name: *, script: *, instances: (Array|number), port: *, env: {NODE_ENV: *}, env_production: {NODE_ENV: (string|string)}, description: string | string | *}}
  */
-export function formatConfig(config) {
+function formatConfig(config) {
 
     if (!config) {
         return;
@@ -51,20 +51,20 @@ export function formatConfig(config) {
  * read applications config in file <applications.json>
  * @returns {any}
  */
-export function getApplicationsConfig() {
+function getApplicationsConfig() {
 
     try {
 
         const json = fs.readFileSync(filePath);
 
         if (!json) {
-            return;
+            return [];
         }
 
         return JSON.parse(json);
 
     } catch (e) {
-        return;
+        return [];
     }
 
 }
@@ -73,7 +73,7 @@ export function getApplicationsConfig() {
  * write applications config to file <applications.json>
  * @param config
  */
-export function setApplicationsConfig(config) {
+function setApplicationsConfig(config) {
 
     if (!config) {
         return;
@@ -87,26 +87,34 @@ export function setApplicationsConfig(config) {
 
 }
 
+function isApplicationNameExist(name) {
+
+    if (!name) {
+        return false;
+    }
+
+    const applications = getApplicationsConfig();
+
+    if (!applications || applications.length < 1) {
+        return false;
+    }
+
+    return applications.findIndex(item => item && item.name === name) !== -1;
+
+}
+
 /**
  * append new application config
  * @param config
  * @returns {*|void}
  */
-export function appendApplicationConfig(config) {
+function appendApplicationConfig(config) {
 
-    if (!config) {
+    if (!config || !config.name) {
         return;
     }
 
-    const json = fs.readFileSync(filePath);
-    let applications;
-
-    try {
-        applications = JSON.parse(json);
-    } catch (e) {
-        applications = [];
-    }
-
+    const applications = getApplicationsConfig();
     applications.push(formatConfig(config));
 
     return setApplicationsConfig(applications);
@@ -116,7 +124,7 @@ export function appendApplicationConfig(config) {
 /**
  * install node dependencies
  */
-export function installDependencies() {
+function installDependencies() {
     exec('npm i -d', {
         cwd: path.resolve(__dirname, '../../pm2-apps/alcedo-ui/')
     }, (error, stdout, stderr) => {
@@ -128,3 +136,16 @@ export function installDependencies() {
         console.log(`stderr: ${stderr}`);
     });
 }
+
+export default {
+
+    DEFAULT_CONFIG,
+
+    formatConfig,
+    getApplicationsConfig,
+    setApplicationsConfig,
+    isApplicationNameExist,
+    appendApplicationConfig,
+    installDependencies
+
+};
