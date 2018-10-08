@@ -3,7 +3,16 @@ import PMUtil from '../utils/PMUtil.js';
 import ApplicationsUtil from '../utils/ApplicationsUtil.js';
 
 async function upload(applicationName, file) {
+    try {
 
+        await ApplicationsUtil.savePackage(applicationName, file);
+        await ApplicationsUtil.decompressPackage(applicationName, file);
+
+        return Response.buildSuccess('');
+
+    } catch (e) {
+        return Response.buildError('Upload Application Failed');
+    }
 };
 
 async function create(config) {
