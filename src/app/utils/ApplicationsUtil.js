@@ -122,6 +122,11 @@ function appendConfig(config) {
 
 }
 
+/**
+ * check the application has package or not
+ * @param name
+ * @returns {boolean}
+ */
 function hasPackage(name) {
 
     if (!name) {
