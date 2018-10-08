@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 
 const filePath = path.resolve(__dirname, '../../applications.json');
@@ -51,7 +52,7 @@ function formatConfig(config) {
  * read applications config in file <applications.json>
  * @returns {any}
  */
-function getApplicationsConfig() {
+function getConfigs() {
 
     try {
 
@@ -73,7 +74,7 @@ function getApplicationsConfig() {
  * write applications config to file <applications.json>
  * @param config
  */
-function setApplicationsConfig(config) {
+function setConfigs(config) {
 
     if (!config) {
         return;
@@ -87,13 +88,13 @@ function setApplicationsConfig(config) {
 
 }
 
-function isApplicationNameExist(name) {
+function isNameExist(name) {
 
     if (!name) {
         return false;
     }
 
-    const applications = getApplicationsConfig();
+    const applications = getConfigs();
 
     if (!applications || applications.length < 1) {
         return false;
@@ -108,16 +109,26 @@ function isApplicationNameExist(name) {
  * @param config
  * @returns {*|void}
  */
-function appendApplicationConfig(config) {
+function appendConfig(config) {
 
     if (!config || !config.name) {
         return;
     }
 
-    const applications = getApplicationsConfig();
+    const applications = getConfigs();
     applications.push(formatConfig(config));
 
-    return setApplicationsConfig(applications);
+    return setConfigs(applications);
+
+}
+
+function hasPackage(name) {
+
+    if (!name) {
+        return false;
+    }
+
+    return FsUtil.isExistSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
 
 }
 
@@ -142,10 +153,11 @@ export default {
     DEFAULT_CONFIG,
 
     formatConfig,
-    getApplicationsConfig,
-    setApplicationsConfig,
-    isApplicationNameExist,
-    appendApplicationConfig,
+    getConfigs,
+    setConfigs,
+    isNameExist,
+    appendConfig,
+    hasPackage,
     installDependencies
 
 };
