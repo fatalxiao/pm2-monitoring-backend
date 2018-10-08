@@ -6,7 +6,7 @@ async function getApplications() {
 
     try {
 
-        const data = ApplicationsUtil.getApplicationsConfig();
+        const data = ApplicationsUtil.getConfigs();
 
         if (!data) {
             return Response.buildSuccess([]);
@@ -16,14 +16,21 @@ async function getApplications() {
         const processList = await PMUtil.list();
 
         return Response.buildSuccess(data.filter(item => item).map(item => {
-            const index = processList.findIndex(p => p && p.name === item.name);
-            return index === -1 ? item : {
-                ...item,
-                pid: processList[index].pid,
-                pm_id: processList[index].pm_id,
-                status: processList[index].pm2_env.status,
-                monit: processList[index].monit
+
+            const index = processList.findIndex(p => p && p.name === item.name),
+                result = index === -1 ? item : {
+                    ...item,
+                    pid: processList[index].pid,
+                    pm_id: processList[index].pm_id,
+                    status: processList[index].pm2_env.status,
+                    monit: processList[index].monit
+                };
+
+            return {
+                ...result,
+                isReady: ApplicationsUtil.hasPackage(item.name)
             };
+
         }));
 
     } catch (e) {
