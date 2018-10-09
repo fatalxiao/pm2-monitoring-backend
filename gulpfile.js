@@ -1,8 +1,8 @@
 const gulp = require('gulp'),
     babel = require('gulp-babel');
 
-gulp.task('es', () =>
-    gulp.src(['./src/**', '!./src/pm2-apps/**'])
+gulp.task('copy', () =>
+    gulp.src(['./src/**', '!./src/pm2-apps/**','!./src/applications.json'])
         .pipe(babel({
             presets: [['@babel/env', {modules: 'commonjs'}]],
             plugins: ['@babel/plugin-transform-runtime']
@@ -10,4 +10,4 @@ gulp.task('es', () =>
         .pipe(gulp.dest('./dist'))
 );
 
-gulp.task('package', gulp.series('es'));
+gulp.task('package', gulp.series('copy'));
