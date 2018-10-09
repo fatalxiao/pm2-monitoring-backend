@@ -149,7 +149,6 @@ function rmPackage(name) {
 }
 
 function savePackage(name, file) {
-
     return new Promise(resolve => {
 
         const reader = fs.createReadStream(file.path),
@@ -163,16 +162,14 @@ function savePackage(name, file) {
         reader.pipe(writer);
 
     });
-
 }
 
 function decompressPackage(name) {
+    return new Promise((resolve, reject) => {
 
-    if (!name) {
-        return;
-    }
-
-    return new Promise(resolve => {
+        if (!name) {
+            reject();
+        }
 
         rmPackage(name);
 
@@ -187,40 +184,48 @@ function decompressPackage(name) {
         }));
 
     });
-
 }
 
-
-
 function cleanPackage(name) {
+    return new Promise((resolve, reject) => {
 
-    if (!name) {
-        return;
-    }
+        if (!name) {
+            reject();
+        }
 
-    const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
-        paths = fs.readdirSync(dirPath);
+        const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
+            paths = fs.readdirSync(dirPath);
 
-    if (paths && paths.length === 1 && fs.statSync(`${dirPath}/${paths[0]}`).isDirectory()) {
-        FsUtil.copyRecursionSync(`${dirPath}/${paths[0]}`, dirPath);
-        FsUtil.rmRecursionSync(`${dirPath}/${paths[0]}`);
-    }
+        if (paths && paths.length === 1 && fs.statSync(`${dirPath}/${paths[0]}`).isDirectory()) {
+            FsUtil.copyRecursionSync(`${dirPath}/${paths[0]}`, dirPath);
+            FsUtil.rmRecursionSync(`${dirPath}/${paths[0]}`);
+        }
 
+        resolve();
+
+    });
 }
 
 /**
  * install node dependencies
  */
-function installDependencies() {
-    exec('npm i -d', {
-        cwd: path.resolve(__dirname, '../../pm2-apps/alcedo-ui/')
-    }, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`exec error: ${error}`);
-            return;
+function installDependencies(name) {
+    return new Promise((resolve, reject) => {
+
+        if (!name) {
+            reject();
         }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
+
+        exec('npm i -d', {
+            cwd: path.resolve(__dirname, `../../pm2-apps/${name}`)
+        }, error => {
+            if (error) {
+                reject(error);
+            }
+        }).on('close', () => {
+            resolve();
+        });
+
     });
 }
 
