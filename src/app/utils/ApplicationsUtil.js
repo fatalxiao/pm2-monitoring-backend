@@ -4,7 +4,8 @@ import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 import unzip from 'unzip-stream';
 
-const filePath = path.resolve(__dirname, '../../applications.json');
+const dirPath = path.resolve(__dirname, '../../pm2-apps'),
+    configPath = path.resolve(__dirname, '../../ecosystem.config.js');
 
 /**
  * default application config
@@ -57,13 +58,14 @@ function getConfigs() {
 
     try {
 
-        const json = fs.readFileSync(filePath);
+        const config = require(configPath);
 
-        if (!json) {
+        if (!config) {
             return [];
         }
 
-        return JSON.parse(json);
+        return config.apps || [];
+
 
     } catch (e) {
         return [];
@@ -82,7 +84,7 @@ function setConfigs(config) {
     }
 
     try {
-        return fs.writeFileSync(filePath, JSON.stringify(config));
+        return fs.writeFileSync(configPath, 'module.exports={apps:' + JSON.stringify(config) + '};');
     } catch (e) {
         return;
     }
@@ -124,13 +126,9 @@ function appendConfig(config) {
 }
 
 function checkAppDir() {
-
-    const p = path.resolve(__dirname, '../../pm2-apps');
-
-    if (!FsUtil.isExistSync(p)) {
-        fs.mkdirSync(p);
+    if (!FsUtil.isExistSync(dirPath)) {
+        fs.mkdirSync(dirPath);
     }
-
 }
 
 /**
@@ -146,7 +144,7 @@ function hasPackage(name) {
 
     checkAppDir();
 
-    return FsUtil.isExistSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
+    return FsUtil.isExistSync(`${dirPath}/${name}`);
 
 }
 
@@ -158,7 +156,7 @@ function rmPackage(name) {
 
     checkAppDir();
 
-    FsUtil.rmRecursionSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
+    FsUtil.rmRecursionSync(`${dirPath}/${name}`);
 
 }
 
@@ -168,7 +166,7 @@ function savePackage(name, file) {
         checkAppDir();
 
         const reader = fs.createReadStream(file.path),
-            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
+            filePath = `${dirPath}/${name}.zip`,
             writer = fs.createWriteStream(filePath);
 
         writer.on('close', () => {
@@ -190,12 +188,8 @@ function decompressPackage(name) {
         checkAppDir();
         rmPackage(name);
 
-        const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
-            filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
-            reader = fs.createReadStream(filePath);
-
-        reader.pipe(unzip.Extract({
-            path: dirPath
+        fs.createReadStream(`${dirPath}/${name}.zip`).pipe(unzip.Extract({
+            path: `${dirPath}/${name}`
         }).on('close', () => {
             resolve();
         }));
@@ -212,12 +206,12 @@ function cleanPackage(name) {
 
         checkAppDir();
 
-        const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
-            paths = fs.readdirSync(dirPath);
+        const appPath = `${dirPath}/${name}`,
+            paths = fs.readdirSync(appPath);
 
-        if (paths && paths.length === 1 && fs.statSync(`${dirPath}/${paths[0]}`).isDirectory()) {
-            FsUtil.copyRecursionSync(`${dirPath}/${paths[0]}`, dirPath);
-            FsUtil.rmRecursionSync(`${dirPath}/${paths[0]}`);
+        if (paths && paths.length === 1 && fs.statSync(`${appPath}/${paths[0]}`).isDirectory()) {
+            FsUtil.copyRecursionSync(`${appPath}/${paths[0]}`, appPath);
+            FsUtil.rmRecursionSync(`${appPath}/${paths[0]}`);
         }
 
         resolve();
@@ -238,7 +232,7 @@ function installDependencies(name) {
         checkAppDir();
 
         exec('npm i -d', {
-            cwd: path.resolve(__dirname, `../../pm2-apps/${name}`)
+            cwd: `${dirPath}/${name}`
         }, error => {
             if (error) {
                 reject(error);
