@@ -2,7 +2,7 @@
     "name": "pm2-monitoring-backend",
     "author": "liangxiaojun",
     "version": "1.0.0",
-    "description": "PM2 monitoring Back-end Project.",
+    "description": "PM2 monitoring Back-end Project",
     "main": "./src/app.js",
     "scripts": {
         "dev": "nodemon $NODE_DEBUG_OPTION src/app --exec babel-node --ignore 'src/pm2-apps/*'",
