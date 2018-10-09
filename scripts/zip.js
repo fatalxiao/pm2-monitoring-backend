@@ -3,11 +3,18 @@ const fs = require('fs'),
     crypto = require('crypto'),
     log = require('friendly-errors-webpack-plugin/src/output'),
 
-    {fsExistsSync} = require('./utils.js'),
-
     name = 'pm2-monitoring-backend',
     distPath = `./dist`,
     zipPath = `./${name}.zip`;
+
+function fsExistsSync(p) {
+    try {
+        fs.accessSync(p, (fs.constants && fs.constants.F_OK) || fs.F_OK);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
 
 log.title('info', 'WAIT', 'Building Zip...');
 
@@ -27,7 +34,7 @@ output.on('close', () => {
         hash = crypto.createHash('sha256');
 
     rs.on('data', hash.update.bind(hash));
-    rs.on('end', function () {
+    rs.on('end', () => {
         log.title('success', 'DONE', [
             'Build Zip complete',
             `Archive: ${archive.pointer()} total bytes`,
