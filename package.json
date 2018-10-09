@@ -11,7 +11,7 @@
         "build": "npm run clean && npm run package",
         "run": "cross-env NODE_ENV=production node $NODE_DEBUG_OPTION dist/app",
         "start": "npm run build && npm run run",
-        "zip": "node scripts/zip"
+        "zip": "node build/zip"
     },
     "repository": {
         "type": "git",
