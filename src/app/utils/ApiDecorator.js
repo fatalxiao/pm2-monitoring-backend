@@ -1,6 +1,7 @@
 const REQUEST_PROTOCOL = Symbol('REQUEST_PROTOCOL'),
     REQUEST_METHOD = Symbol('REQUEST_METHOD'),
     REQUEST_ROUTE = Symbol('REQUEST_ROUTE'),
+    REQUEST_UPLOAD = Symbol('REQUEST_UPLOAD'),
 
     RequestProtocol = {
         HTTP: 'http',
@@ -14,10 +15,11 @@ const REQUEST_PROTOCOL = Symbol('REQUEST_PROTOCOL'),
         DELETE: 'delete'
     };
 
-function descriptorHandler(descriptor, {protocol, method, route}) {
+function descriptorHandler(descriptor, {protocol, method, route, upload}) {
     protocol && (descriptor.value[REQUEST_PROTOCOL] = protocol);
     method && (descriptor.value[REQUEST_METHOD] = method);
     route && (descriptor.value[REQUEST_ROUTE] = route);
+    upload && (descriptor.value[REQUEST_UPLOAD] = upload);
     return descriptor;
 }
 
@@ -29,8 +31,8 @@ const GetMapping = ({route}) => (target, name, descriptor) => {
     return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.GET, route});
 };
 
-const PostMapping = ({route}) => (target, name, descriptor) => {
-    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.POST, route});
+const PostMapping = ({route, upload}) => (target, name, descriptor) => {
+    return descriptorHandler(descriptor, {protocol: RequestProtocol.HTTP, method: RequestMethod.POST, route, upload});
 };
 
 const PutMapping = ({route}) => (target, name, descriptor) => {
@@ -66,6 +68,7 @@ export {
     REQUEST_PROTOCOL,
     REQUEST_METHOD,
     REQUEST_ROUTE,
+    REQUEST_UPLOAD,
 
     RequestProtocol,
     RequestMethod,

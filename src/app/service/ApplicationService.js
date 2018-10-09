@@ -6,7 +6,9 @@ async function upload(applicationName, file) {
     try {
 
         await ApplicationsUtil.savePackage(applicationName, file);
-        await ApplicationsUtil.decompressPackage(applicationName, file);
+        await ApplicationsUtil.decompressPackage(applicationName);
+        await ApplicationsUtil.cleanPackage(applicationName);
+        await ApplicationsUtil.installDependencies(applicationName);
 
         return Response.buildSuccess('');
 
