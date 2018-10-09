@@ -55,5 +55,5 @@ output.on('close', () => {
 
 });
 archive.pipe(output);
-archive.directory(path, name);
+archive.directory(path, false);
 archive.finalize();
