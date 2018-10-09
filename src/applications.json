@@ -3,7 +3,7 @@
         "name": "alcedo-ui",
         "script": "server.js",
         "env": {
-            "NODE_ENV": "development"
+            "NODE_ENV": "production"
         },
         "description": "alcedo-ui"
     },
