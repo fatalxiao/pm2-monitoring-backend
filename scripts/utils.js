@@ -1,20 +1,5 @@
 const fs = require('fs'),
-    path = require('path'),
-    crypto = require('crypto'),
-
-    config = require('./config.js');
-
-function assetsPath(p) {
-    return path.posix.join(config.assetsDirectory, p);
-};
-
-function assetsSubPath(p) {
-    return path.posix.join(config.assetsSubDirectory, p);
-};
-
-function assetsVendorsAbsolutePath(p, env = 'production') {
-    return path.posix.join(config[env].assetsRoot, assetsSubPath(`vendors/${p}`));
-};
+    crypto = require('crypto');
 
 function fsExistsSync(path) {
     try {
@@ -117,9 +102,6 @@ function calculateSHA256(filePath, callback) {
     });
 }
 
-exports.assetsPath = assetsPath;
-exports.assetsSubPath = assetsSubPath;
-exports.assetsVendorsAbsolutePath = assetsVendorsAbsolutePath;
 exports.fsExistsSync = fsExistsSync;
 exports.copyRecursionSync = copyRecursionSync;
 exports.rmRecursionSync = rmRecursionSync;
