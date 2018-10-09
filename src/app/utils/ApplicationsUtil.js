@@ -14,10 +14,9 @@ const DEFAULT_CONFIG = {
     name: '',
     description: '',
     instances: 1,
-    script: '',
+    script: 'server.js',
     port: '',
-    env: '',
-    envProd: ''
+    env: 'production'
 };
 
 /**
@@ -31,21 +30,22 @@ function formatConfig(config) {
         return;
     }
 
-    const finalConfig = {...DEFAULT_CONFIG, ...config};
+    const port = config.port || DEFAULT_CONFIG.port,
+        result = {
+            name: config.name || DEFAULT_CONFIG.name,
+            script: config.script || DEFAULT_CONFIG.script,
+            instances: config.instances || DEFAULT_CONFIG.instances,
+            env: {
+                NODE_ENV: config.env || DEFAULT_CONFIG.env
+            },
+            description: config.description || DEFAULT_CONFIG.description
+        };
 
-    return {
-        name: finalConfig.name,
-        script: finalConfig.script,
-        instances: finalConfig.instances,
-        port: finalConfig.port,
-        env: {
-            NODE_ENV: finalConfig.env
-        },
-        env_production: {
-            NODE_ENV: finalConfig.envProd
-        },
-        description: finalConfig.description
-    };
+    if (port) {
+        result.port = +port;
+    }
+
+    return result;
 
 }
 
