@@ -14,7 +14,7 @@ const DEFAULT_CONFIG = {
     name: '',
     description: '',
     instances: 1,
-    script: '',
+    script: 'server.js',
     port: '',
     env: 'production'
 };
