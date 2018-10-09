@@ -3,11 +3,10 @@ const fs = require('fs'),
     crypto = require('crypto'),
     log = require('friendly-errors-webpack-plugin/src/output'),
 
-    {fsExistsSync, copyRecursionSync, rmRecursionSync} = require('./utils.js'),
+    {fsExistsSync} = require('./utils.js'),
 
     name = 'pm2-monitoring-backend',
-    path = `./${name}`,
-    distPath = `${path}/dist`,
+    distPath = `./dist`,
     zipPath = `./${name}.zip`;
 
 log.title('info', 'WAIT', 'Building Zip...');
@@ -17,28 +16,11 @@ if (fsExistsSync(zipPath)) {
     fs.unlinkSync(zipPath);
 }
 
-// remove temp dir
-if (fsExistsSync(path)) {
-    rmRecursionSync(path);
-}
-
-// make temp dir
-fs.mkdirSync(path);
-fs.mkdirSync(distPath);
-
-// copy files
-copyRecursionSync('dist', distPath, ['node_modules', '.DS_Store']);
-
 // make archive
 const output = fs.createWriteStream(zipPath),
     archive = archiver('zip', {zlib: {level: 9}});
 
 output.on('close', () => {
-
-    // remove temp dir
-    if (fsExistsSync(path)) {
-        rmRecursionSync(path);
-    }
 
     // calculate SHA-256 Hash
     const rs = fs.createReadStream(zipPath),
@@ -55,5 +37,5 @@ output.on('close', () => {
 
 });
 archive.pipe(output);
-archive.directory(path, false);
+archive.directory(distPath, false);
 archive.finalize();
