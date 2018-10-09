@@ -7,6 +7,7 @@ const fs = require('fs'),
 
     name = 'pm2-monitoring-backend',
     path = `./${name}`,
+    distPath = `${path}/dist`,
     zipPath = `./${name}.zip`;
 
 log.title('info', 'WAIT', 'Building Zip...');
@@ -23,9 +24,10 @@ if (fsExistsSync(path)) {
 
 // make temp dir
 fs.mkdirSync(path);
+fs.mkdirSync(distPath);
 
 // copy files
-copyRecursionSync('dist', path, ['node_modules', '.DS_Store']);
+copyRecursionSync('dist', distPath, ['node_modules', '.DS_Store']);
 copyRecursionSync('./build/release', path);
 
 // make archive
