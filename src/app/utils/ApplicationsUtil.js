@@ -123,6 +123,16 @@ function appendConfig(config) {
 
 }
 
+function checkAppDir() {
+
+    const p = path.resolve(__dirname, '../../pm2-apps');
+
+    if (!FsUtil.isExistSync(p)) {
+        fs.mkdirSync(p);
+    }
+
+}
+
 /**
  * check the application has package or not
  * @param name
@@ -134,6 +144,8 @@ function hasPackage(name) {
         return false;
     }
 
+    checkAppDir();
+
     return FsUtil.isExistSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
 
 }
@@ -144,12 +156,16 @@ function rmPackage(name) {
         return;
     }
 
+    checkAppDir();
+
     FsUtil.rmRecursionSync(path.resolve(__dirname, `../../pm2-apps/${name}`));
 
 }
 
 function savePackage(name, file) {
     return new Promise(resolve => {
+
+        checkAppDir();
 
         const reader = fs.createReadStream(file.path),
             filePath = path.resolve(__dirname, `../../pm2-apps/${name}.zip`),
@@ -171,6 +187,7 @@ function decompressPackage(name) {
             reject();
         }
 
+        checkAppDir();
         rmPackage(name);
 
         const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
@@ -192,6 +209,8 @@ function cleanPackage(name) {
         if (!name) {
             reject();
         }
+
+        checkAppDir();
 
         const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
             paths = fs.readdirSync(dirPath);
@@ -215,6 +234,8 @@ function installDependencies(name) {
         if (!name) {
             reject();
         }
+
+        checkAppDir();
 
         exec('npm i -d', {
             cwd: path.resolve(__dirname, `../../pm2-apps/${name}`)
