@@ -9,8 +9,6 @@ function isExistSync(p) {
     return true;
 }
 
-
-
 function copyRecursionSync(src, dist, excludes) {
 
     const paths = fs.readdirSync(src);
