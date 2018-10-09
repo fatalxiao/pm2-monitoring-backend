@@ -42,7 +42,7 @@ function formatConfig(config) {
         };
 
     if (port) {
-        result.env.PM2_SERVE_PORT = +port;
+        result.port = +port;
     }
 
     return result;
