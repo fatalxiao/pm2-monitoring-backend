@@ -166,9 +166,9 @@ function savePackage(name, file) {
 
 }
 
-function decompressPackage(name, file) {
+function decompressPackage(name) {
 
-    if (!name || !file) {
+    if (!name) {
         return;
     }
 
@@ -187,6 +187,24 @@ function decompressPackage(name, file) {
         }));
 
     });
+
+}
+
+
+
+function cleanPackage(name) {
+
+    if (!name) {
+        return;
+    }
+
+    const dirPath = path.resolve(__dirname, `../../pm2-apps/${name}`),
+        paths = fs.readdirSync(dirPath);
+
+    if (paths && paths.length === 1 && fs.statSync(`${dirPath}/${paths[0]}`).isDirectory()) {
+        FsUtil.copyRecursionSync(`${dirPath}/${paths[0]}`, dirPath);
+        FsUtil.rmRecursionSync(`${dirPath}/${paths[0]}`);
+    }
 
 }
 
@@ -218,6 +236,7 @@ export default {
     hasPackage,
     savePackage,
     decompressPackage,
+    cleanPackage,
     installDependencies
 
 };
