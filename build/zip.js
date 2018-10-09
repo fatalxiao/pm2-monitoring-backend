@@ -26,7 +26,7 @@ fs.mkdirSync(path);
 
 // copy files
 copyRecursionSync('dist', path, ['node_modules', '.DS_Store']);
-copyRecursionSync('./release', path);
+copyRecursionSync('./build/release', path);
 
 // make archive
 const output = fs.createWriteStream(zipPath),
