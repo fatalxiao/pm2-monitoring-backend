@@ -4,7 +4,7 @@ import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 import unzip from 'unzip-stream';
 
-const dirPath = path.resolve(__dirname, '../../pm2-apps'),
+const dirPath = path.resolve(__dirname, '../../../../pm2-apps'),
     configPath = path.resolve(__dirname, '../../ecosystem.config.js');
 
 /**
@@ -36,7 +36,7 @@ function formatConfig(config) {
         port = config.port || DEFAULT_CONFIG.port,
         result = {
             name,
-            script: `./pm2-apps/${name}/${script}`,
+            script: `${dirPath}/${name}/${script}`,
             instances: config.instances || DEFAULT_CONFIG.instances,
             env: {
                 NODE_ENV: config.env || DEFAULT_CONFIG.env
