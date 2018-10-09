@@ -1,7 +1,7 @@
 import fs from 'fs';
 import Router from 'koa-router';
 import koaBody from 'koa-body';
-import {REQUEST_PROTOCOL, REQUEST_METHOD, REQUEST_ROUTE, RequestProtocol} from './ApiDecorator';
+import {REQUEST_PROTOCOL, REQUEST_METHOD, REQUEST_ROUTE, REQUEST_UPLOAD, RequestProtocol} from './ApiDecorator';
 
 const router = Router();
 
@@ -9,13 +9,18 @@ function mappingMethod(controller, method, isWebsocket) {
 
     const requestProtocol = method[REQUEST_PROTOCOL],
         requestMethod = method[REQUEST_METHOD],
-        requestRoute = method[REQUEST_ROUTE];
+        requestRoute = method[REQUEST_ROUTE],
+        requestUpload = method[REQUEST_UPLOAD];
 
     // add mapping route
     // console.log(`register URL mapping: ${requestMethod.toUpperCase()} ${requestRoute}`);
     if ((isWebsocket && requestProtocol === RequestProtocol.WEBSOCKET)
         || (!isWebsocket && requestProtocol === RequestProtocol.HTTP)) {
-        router[requestMethod](requestRoute, koaBody({multipart: true}), method);
+        if (requestUpload) {
+            router[requestMethod](requestRoute, koaBody({multipart: true}), method);
+        } else {
+            router[requestMethod](requestRoute, method);
+        }
     }
 
 }
