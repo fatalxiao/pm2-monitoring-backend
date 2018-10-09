@@ -31,10 +31,12 @@ function formatConfig(config) {
         return;
     }
 
-    const port = config.port || DEFAULT_CONFIG.port,
+    const name = config.name || DEFAULT_CONFIG.name,
+        script = config.script || DEFAULT_CONFIG.script,
+        port = config.port || DEFAULT_CONFIG.port,
         result = {
-            name: config.name || DEFAULT_CONFIG.name,
-            script: config.script || DEFAULT_CONFIG.script,
+            name,
+            script: `./pm2-apps/${name}/${script}`,
             instances: config.instances || DEFAULT_CONFIG.instances,
             env: {
                 NODE_ENV: config.env || DEFAULT_CONFIG.env
