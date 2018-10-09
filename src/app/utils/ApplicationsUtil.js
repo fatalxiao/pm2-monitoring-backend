@@ -16,8 +16,7 @@ const DEFAULT_CONFIG = {
     instances: 1,
     script: '',
     port: '',
-    env: '',
-    envProd: ''
+    env: 'production'
 };
 
 /**
@@ -37,12 +36,9 @@ function formatConfig(config) {
         name: finalConfig.name,
         script: finalConfig.script,
         instances: finalConfig.instances,
-        port: finalConfig.port,
         env: {
-            NODE_ENV: finalConfig.env
-        },
-        env_production: {
-            NODE_ENV: finalConfig.envProd
+            NODE_ENV: finalConfig.env,
+            NODE_PORT: finalConfig.port ? +finalConfig.port : ''
         },
         description: finalConfig.description
     };
