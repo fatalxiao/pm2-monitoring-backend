@@ -14,7 +14,5 @@ node_modules
 package-lock.json
 
 # Distribution
-/src/ecosystem.config.js
 /dist
-pm2-apps
 pm2-monitoring-backend.zip
