@@ -3,9 +3,10 @@ import fs from 'fs';
 import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 import unzip from 'unzip-stream';
+import config from '../../config';
 
-const dirPath = path.resolve(__dirname, '../../../../pm2-apps'),
-    configPath = path.resolve(__dirname, '../../ecosystem.config.js');
+const dirPath = `${config.appsRootPath}/pm2-apps`,
+    configPath = `${config.appsRootPath}/ecosystem.config.js`;
 
 /**
  * default application config
@@ -52,6 +53,15 @@ function formatConfig(config) {
 
 }
 
+function checkAppDir() {
+    if (!FsUtil.isExistSync(config.appsRootPath)) {
+        fs.mkdirSync(config.appsRootPath);
+    }
+    if (!FsUtil.isExistSync(dirPath)) {
+        fs.mkdirSync(dirPath);
+    }
+}
+
 /**
  * read applications config in file <applications.json>
  * @returns {any}
@@ -86,7 +96,11 @@ function setConfigs(config) {
     }
 
     try {
+
+        checkAppDir();
+
         return fs.writeFileSync(configPath, 'module.exports={apps:' + JSON.stringify(config) + '};');
+
     } catch (e) {
         return;
     }
@@ -99,13 +113,19 @@ function isNameExist(name) {
         return false;
     }
 
-    const applications = getConfigs();
+    try {
 
-    if (!applications || applications.length < 1) {
-        return false;
+        const applications = getConfigs();
+
+        if (!applications || applications.length < 1) {
+            return false;
+        }
+
+        return applications.findIndex(item => item && item.name === name) !== -1;
+
+    } catch (e) {
+        return;
     }
-
-    return applications.findIndex(item => item && item.name === name) !== -1;
 
 }
 
@@ -120,17 +140,17 @@ function appendConfig(config) {
         return;
     }
 
-    const applications = getConfigs();
-    applications.push(formatConfig(config));
+    try {
 
-    return setConfigs(applications);
+        const applications = getConfigs();
+        applications.push(formatConfig(config));
 
-}
+        return setConfigs(applications);
 
-function checkAppDir() {
-    if (!FsUtil.isExistSync(dirPath)) {
-        fs.mkdirSync(dirPath);
+    } catch (e) {
+        return;
     }
+
 }
 
 /**
@@ -144,9 +164,15 @@ function hasPackage(name) {
         return false;
     }
 
-    checkAppDir();
+    try {
 
-    return FsUtil.isExistSync(`${dirPath}/${name}`);
+        checkAppDir();
+
+        return FsUtil.isExistSync(`${dirPath}/${name}`);
+
+    } catch (e) {
+        return;
+    }
 
 }
 
@@ -156,9 +182,15 @@ function rmPackage(name) {
         return;
     }
 
-    checkAppDir();
+    try {
 
-    FsUtil.rmRecursionSync(`${dirPath}/${name}`);
+        checkAppDir();
+
+        FsUtil.rmRecursionSync(`${dirPath}/${name}`);
+
+    } catch (e) {
+        return;
+    }
 
 }
 
