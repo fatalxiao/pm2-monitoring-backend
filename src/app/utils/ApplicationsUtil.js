@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs';
 import FsUtil from './FsUtil';
 import {exec} from 'child_process';
@@ -26,23 +25,24 @@ const DEFAULT_CONFIG = {
  * @param config
  * @returns {{name: *, script: *, instances: (Array|number), port: *, env: {NODE_ENV: *}, env_production: {NODE_ENV: (string|string)}, description: string | string | *}}
  */
-function formatConfig(config) {
+function formatToEcosystemConfig(userConfig) {
 
-    if (!config) {
+    if (!userConfig) {
         return;
     }
 
-    const name = config.name || DEFAULT_CONFIG.name,
-        script = config.script || DEFAULT_CONFIG.script,
-        port = config.port || DEFAULT_CONFIG.port,
+    const name = userConfig.name || DEFAULT_CONFIG.name,
+        script = userConfig.script || DEFAULT_CONFIG.script,
+        port = userConfig.port || DEFAULT_CONFIG.port,
         result = {
             name,
             script: `${dirPath}/${name}/${script}`,
-            instances: config.instances || DEFAULT_CONFIG.instances,
+            rawScript: script,
+            instances: userConfig.instances || DEFAULT_CONFIG.instances,
             env: {
-                NODE_ENV: config.env || DEFAULT_CONFIG.env
+                NODE_ENV: userConfig.env || DEFAULT_CONFIG.env
             },
-            description: config.description || DEFAULT_CONFIG.description
+            description: userConfig.description || DEFAULT_CONFIG.description
         };
 
     if (port) {
@@ -50,6 +50,23 @@ function formatConfig(config) {
     }
 
     return result;
+
+}
+
+function formatToUserConfig(ecosystemConfig) {
+
+    if (!ecosystemConfig) {
+        return;
+    }
+
+    return {
+        name: ecosystemConfig.name,
+        script: ecosystemConfig.rawScript,
+        instances: ecosystemConfig.instances,
+        env: ecosystemConfig.env.NODE_ENV,
+        description: ecosystemConfig.description,
+        port: ecosystemConfig.port
+    };
 
 }
 
@@ -143,7 +160,7 @@ function appendConfig(config) {
     try {
 
         const applications = getConfigs();
-        applications.push(formatConfig(config));
+        applications.push(formatToEcosystemConfig(config));
 
         return setConfigs(applications);
 
@@ -282,7 +299,8 @@ export default {
 
     DEFAULT_CONFIG,
 
-    formatConfig,
+    formatToEcosystemConfig,
+    formatToUserConfig,
     getConfigs,
     setConfigs,
     isNameExist,
