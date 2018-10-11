@@ -17,6 +17,8 @@ async function getApplications() {
 
         return Response.buildSuccess(data.filter(item => item).map(item => {
 
+            item = ApplicationsUtil.formatToUserConfig(item);
+
             const index = processList.findIndex(p => p && p.name === item.name),
                 result = index === -1 ? item : {
                     ...item,
