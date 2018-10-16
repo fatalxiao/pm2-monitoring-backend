@@ -24,7 +24,7 @@ async function getApplications() {
                     ...item,
                     pid: processList[index].pid,
                     pm_id: processList[index].pm_id,
-                    status: processList[index].pm2_env.status,
+                    status: processList[index].pm2_env.status || 'offline',
                     monit: processList[index].monit
                 };
 
