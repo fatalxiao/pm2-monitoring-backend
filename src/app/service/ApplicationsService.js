@@ -20,7 +20,10 @@ async function getApplications() {
             item = ApplicationsUtil.formatToUserConfig(item);
 
             const index = processList.findIndex(p => p && p.name === item.name),
-                result = index === -1 ? item : {
+                result = index === -1 ? {
+                    ...item,
+                    status: 'offline'
+                } : {
                     ...item,
                     pid: processList[index].pid,
                     pm_id: processList[index].pm_id,
