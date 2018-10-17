@@ -171,6 +171,42 @@ function appendConfig(config) {
 }
 
 /**
+ * update new application config
+ * @param config
+ * @returns {*|void}
+ */
+function updateConfig(applicationName, config) {
+
+    if (!applicationName || !config) {
+        return;
+    }
+
+    try {
+
+        const applications = getConfigs(),
+            index = applications.findIndex(item => item && item.name === applicationName);
+
+        if (index === -1) {
+            return;
+        }
+
+        const formatedConfig = formatToEcosystemConfig(config);
+        delete formatedConfig.name;
+
+        applications[index] = {
+            ...applications[index],
+            ...formatedConfig
+        };
+
+        return setConfigs(applications);
+
+    } catch (e) {
+        return;
+    }
+
+}
+
+/**
  * check the application has package or not
  * @param name
  * @returns {boolean}
@@ -305,6 +341,7 @@ export default {
     setConfigs,
     isNameExist,
     appendConfig,
+    updateConfig,
     hasPackage,
     savePackage,
     decompressPackage,
