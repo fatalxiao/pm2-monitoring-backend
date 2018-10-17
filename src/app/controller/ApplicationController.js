@@ -50,6 +50,18 @@ class ApplicationController {
 
     }
 
+    @PutMapping({route: '/pm/application/update/:applicationName'})
+    static async update(ctx) {
+
+        const applicationName = ctx.params.applicationName;
+        if (applicationName == undefined) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
+        }
+
+        ctx.response.body = await ApplicationService.update(applicationName, ctx.request.body);
+
+    }
+
     @PutMapping({route: '/pm/application/start/:applicationName'})
     static async startByName(ctx) {
 
