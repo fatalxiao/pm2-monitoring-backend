@@ -35,6 +35,23 @@ async function create(config) {
     }
 };
 
+async function update(applicationName, config) {
+    try {
+
+        if (!ApplicationsUtil.isNameExist(applicationName)) {
+            return Response.buildParamError({
+                name: 'Application Name is undefined'
+            });
+        }
+
+        const proc = await ApplicationsUtil.updateConfig(applicationName, config);
+        return Response.buildSuccess(proc);
+
+    } catch (e) {
+        return Response.buildError('Update Application Failed');
+    }
+};
+
 async function start(options) {
     try {
         const proc = await PMUtil.start(options);
@@ -133,6 +150,7 @@ async function reloadAll() {
 export default {
     upload,
     create,
+    update,
     start,
     startByName,
     stopById,
