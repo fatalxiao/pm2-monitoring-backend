@@ -22,12 +22,14 @@ async function getApplications() {
             const index = processList.findIndex(p => p && p.name === item.name),
                 result = index === -1 ? {
                     ...item,
-                    status: 'offline'
+                    status: 'offline',
+                    port: ''
                 } : {
                     ...item,
                     pid: processList[index].pid,
                     pm_id: processList[index].pm_id,
                     status: processList[index].pm2_env.status || 'offline',
+                    port: processList[index].port || '',
                     monit: processList[index].monit
                 };
 
