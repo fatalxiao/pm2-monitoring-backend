@@ -1,6 +1,9 @@
+import moment from 'moment';
+
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
 import ApplicationsUtil from '../utils/ApplicationsUtil.js';
+import TimeUtil from '../utils/TimeUtil.js';
 
 async function upload(applicationName, file) {
     try {
@@ -27,7 +30,13 @@ async function create(config) {
             });
         }
 
-        const proc = await ApplicationsUtil.appendConfig(config);
+        const now = TimeUtil.getCurrentTime(),
+            proc = await ApplicationsUtil.appendConfig({
+                ...config,
+                createTime: now,
+                lastUpdateTime: now,
+                lastStartTime: null
+            });
         return Response.buildSuccess(proc);
 
     } catch (e) {
