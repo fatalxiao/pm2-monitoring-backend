@@ -42,7 +42,10 @@ function formatToEcosystemConfig(userConfig) {
             env: {
                 NODE_ENV: userConfig.env || DEFAULT_CONFIG.env
             },
-            description: userConfig.description || DEFAULT_CONFIG.description
+            description: userConfig.description || DEFAULT_CONFIG.description,
+            createTime: userConfig.createTime || null,
+            lastUpdateTime: userConfig.lastUpdateTime || null,
+            lastStartTime: userConfig.lastStartTime || null
         };
 
     if (port) {
@@ -60,12 +63,15 @@ function formatToUserConfig(ecosystemConfig) {
     }
 
     return {
-        name: ecosystemConfig.name,
-        script: ecosystemConfig.rawScript,
-        instances: ecosystemConfig.instances,
-        env: ecosystemConfig.env.NODE_ENV,
-        description: ecosystemConfig.description,
-        port: ecosystemConfig.port
+        name: ecosystemConfig.name || '',
+        script: ecosystemConfig.rawScript || '',
+        instances: ecosystemConfig.instances || '',
+        env: ecosystemConfig.env.NODE_ENV || '',
+        description: ecosystemConfig.description || '',
+        port: ecosystemConfig.port || '',
+        createTime: ecosystemConfig.createTime || null,
+        lastUpdateTime: ecosystemConfig.lastUpdateTime || null,
+        lastStartTime: ecosystemConfig.lastStartTime || null
     };
 
 }
