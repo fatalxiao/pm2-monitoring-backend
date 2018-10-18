@@ -1,26 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-
 import ApplicationService from '../service/ApplicationService.js';
 import Response from '../utils/Response.js';
-import {PostMapping, PutMapping, WsPostMapping} from '../utils/ApiDecorator';
+import {PostMapping, PutMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
-
-    // @WsPostMapping({route: '/pm/application/upload/:applicationName'})
-    // static async uploadApplication(ctx) {
-    //
-    //     const applicationName = ctx.params.applicationName;
-    //     if (applicationName == undefined) {
-    //         return ctx.websocket.send(Response.buildParamError('Application Name is required'));
-    //     }
-    //
-    //     ctx.websocket.on('message', message => {
-    //         fs.writeFileSync(path.resolve(__dirname, `../../pm2-apps/${applicationName}.zip`), message);
-    //         return ctx.websocket.send(Response.buildSuccess());
-    //     });
-    //
-    // }
 
     @PostMapping({route: '/pm/application/upload/:applicationName', upload: true})
     static async uploadApplication(ctx) {
