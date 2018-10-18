@@ -53,7 +53,10 @@ async function update(applicationName, config) {
             });
         }
 
-        const proc = await ApplicationsUtil.updateConfig(applicationName, config);
+        const proc = await ApplicationsUtil.updateConfig(applicationName, {
+            ...config,
+            lastUpdateTime: TimeUtil.getCurrentTime()
+        });
         return Response.buildSuccess(proc);
 
     } catch (e) {
