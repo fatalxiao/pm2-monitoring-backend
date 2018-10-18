@@ -40,6 +40,11 @@ class ApplicationController {
             return ctx.response.body = Response.buildParamError('Application Name is required');
         }
 
+        const config = ctx.request.body;
+        if (!config) {
+            return ctx.response.body = Response.buildSuccess();
+        }
+
         ctx.response.body = await ApplicationService.update(applicationName, ctx.request.body);
 
     }
