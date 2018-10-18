@@ -17,6 +17,11 @@ function duration(t1, t2, format = 'YYYY-MM-DD HH:mm:ss') {
 
 }
 
+function getCurrentTime(format = 'YYYY-MM-DD HH:mm:ss') {
+    return moment.utc().format(format);
+}
+
 export default {
-    duration
+    duration,
+    getCurrentTime
 };
