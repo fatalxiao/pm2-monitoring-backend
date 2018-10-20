@@ -196,12 +196,11 @@ function updateConfig(applicationName, config) {
             return;
         }
 
-        const formatedConfig = formatToEcosystemConfig(config);
-        delete formatedConfig.name;
+        delete config.name;
 
         applications[index] = {
             ...applications[index],
-            ...formatedConfig
+            ...config
         };
 
         return setConfigs(applications);
