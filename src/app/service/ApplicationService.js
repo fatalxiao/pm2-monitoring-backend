@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
-import ApplicationsUtil from '../utils/ApplicationsUtil.js';
+import ApplicationsUtil from '../utils/ApplicationUtil.js';
 import TimeUtil from '../utils/TimeUtil.js';
 
 async function upload(applicationName, file) {
