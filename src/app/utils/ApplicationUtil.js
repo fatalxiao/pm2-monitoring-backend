@@ -25,24 +25,24 @@ const DEFAULT_CONFIG = {
  * @param config
  * @returns {{name: *, script: *, instances: (Array|number), port: *, env: {NODE_ENV: *}, env_production: {NODE_ENV: (string|string)}, description: string | string | *}}
  */
-function formatToEcosystemConfig(userConfig) {
+function formatToEcosystemConfig(userConfig, template = DEFAULT_CONFIG) {
 
     if (!userConfig) {
         return;
     }
 
-    const name = userConfig.name || DEFAULT_CONFIG.name,
-        script = userConfig.script || DEFAULT_CONFIG.script,
-        port = userConfig.port || DEFAULT_CONFIG.port,
+    const name = userConfig.name || template.name,
+        script = userConfig.script || template.script,
+        port = userConfig.port || template.port,
         result = {
             name,
             script: `${dirPath}/${name}/${script}`,
             rawScript: script,
-            instances: userConfig.instances || DEFAULT_CONFIG.instances,
+            instances: userConfig.instances || template.instances,
             env: {
-                NODE_ENV: userConfig.env || DEFAULT_CONFIG.env
+                NODE_ENV: userConfig.env || template.env
             },
-            description: userConfig.description || DEFAULT_CONFIG.description
+            description: userConfig.description || template.description
         };
 
     if (port) {
@@ -127,10 +127,10 @@ function setConfigs(config) {
 
 }
 
-function isNameExist(name) {
+function getConfig(applicationName) {
 
-    if (!name) {
-        return false;
+    if (!applicationName) {
+        return;
     }
 
     try {
@@ -138,15 +138,19 @@ function isNameExist(name) {
         const applications = getConfigs();
 
         if (!applications || applications.length < 1) {
-            return false;
+            return;
         }
 
-        return applications.findIndex(item => item && item.name === name) !== -1;
+        return applications.find(item => item && item.name === applicationName);
 
     } catch (e) {
         return;
     }
 
+}
+
+function isNameExist(applicationName) {
+    return !!getConfig(applicationName);
 }
 
 /**
@@ -341,6 +345,7 @@ export default {
     formatToUserConfig,
     getConfigs,
     setConfigs,
+    getConfig,
     isNameExist,
     appendConfig,
     updateConfig,
