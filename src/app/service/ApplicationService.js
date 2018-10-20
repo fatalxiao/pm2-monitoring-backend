@@ -54,7 +54,7 @@ async function update(applicationName, config) {
         }
 
         const proc = await ApplicationsUtil.updateConfig(applicationName, {
-            ...ApplicationsUtil.formatToEcosystemConfig(config),
+            ...ApplicationsUtil.formatToEcosystemConfig(config, ApplicationsUtil.getConfig(applicationName)),
             lastUpdateTime: TimeUtil.getCurrentTime()
         });
         return Response.buildSuccess(proc);
