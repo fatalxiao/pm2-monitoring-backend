@@ -32,7 +32,7 @@ async function create(config) {
 
         const now = TimeUtil.getCurrentTime(),
             proc = await ApplicationsUtil.appendConfig({
-                ...config,
+                ...ApplicationsUtil.formatToEcosystemConfig(config),
                 createTime: now,
                 lastUpdateTime: now,
                 lastStartTime: null
