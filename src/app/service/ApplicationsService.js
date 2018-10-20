@@ -1,5 +1,5 @@
 import Response from '../utils/Response.js';
-import ApplicationsUtil from '../utils/ApplicationsUtil.js';
+import ApplicationsUtil from '../utils/ApplicationUtil.js';
 import PMUtil from '../utils/PMUtil.js';
 
 async function getApplications() {
