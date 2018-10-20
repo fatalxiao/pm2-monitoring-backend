@@ -42,10 +42,7 @@ function formatToEcosystemConfig(userConfig) {
             env: {
                 NODE_ENV: userConfig.env || DEFAULT_CONFIG.env
             },
-            description: userConfig.description || DEFAULT_CONFIG.description,
-            createTime: userConfig.createTime || null,
-            lastUpdateTime: userConfig.lastUpdateTime || null,
-            lastStartTime: userConfig.lastStartTime || null
+            description: userConfig.description || DEFAULT_CONFIG.description
         };
 
     if (port) {
@@ -166,7 +163,7 @@ function appendConfig(config) {
     try {
 
         const applications = getConfigs();
-        applications.push(formatToEcosystemConfig(config));
+        applications.push(config);
 
         return setConfigs(applications);
 
