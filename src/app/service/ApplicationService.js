@@ -66,8 +66,15 @@ async function update(applicationName, config) {
 
 async function start(options) {
     try {
+
         const proc = await PMUtil.start(options);
+
+        await ApplicationsUtil.updateConfig(options.name, {
+            lastStartTime: TimeUtil.getCurrentTime()
+        });
+
         return Response.buildSuccess(proc);
+
     } catch (e) {
         return Response.buildError('Start Application Failed');
     }
