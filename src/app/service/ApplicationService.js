@@ -101,6 +101,15 @@ async function stopById(applicationId) {
     }
 };
 
+async function stopByName(applicationName) {
+    try {
+        const proc = await PMUtil.stopByName(applicationName);
+        return Response.buildSuccess(proc);
+    } catch (e) {
+        return Response.buildError('Stop Application Failed');
+    }
+};
+
 async function stopAll() {
     try {
         const proc = await PMUtil.stopAll();
@@ -172,6 +181,33 @@ async function checkNameExist(applicationName) {
     }
 };
 
+async function rename(originName, newName) {
+    try {
+
+        if (!ApplicationsUtil.isNameExist(originName)) {
+            return Response.buildParamError({
+                name: 'Application Name is undefined'
+            });
+        }
+
+        if (await PMUtil.getStatusByName(originName) !== '') {
+            await PMUtil.stopByName(originName);
+        }
+
+        await ApplicationsUtil.updateConfig(originName, {
+            name: newName,
+            lastUpdateTime: TimeUtil.getCurrentTime()
+        });
+        await ApplicationsUtil.renamePackage(originName, newName);
+        await ApplicationsUtil.renameApplication(originName, newName);
+
+        return Response.buildSuccess();
+
+    } catch (e) {
+        return Response.buildError('Reset application name Failed');
+    }
+};
+
 export default {
     upload,
     create,
@@ -179,6 +215,7 @@ export default {
     start,
     startByName,
     stopById,
+    stopByName,
     stopAll,
     restartById,
     restartAll,
@@ -186,5 +223,6 @@ export default {
     deleteAll,
     reloadById,
     reloadAll,
-    checkNameExist
+    checkNameExist,
+    rename
 };
