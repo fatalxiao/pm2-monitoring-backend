@@ -108,7 +108,7 @@ async function stopAll() {
         const proc = await PMUtil.stopAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Stop Applicationes Failed');
+        return Response.buildError('Stop Applications Failed');
     }
 };
 
@@ -126,7 +126,7 @@ async function restartAll() {
         const proc = await PMUtil.restartAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Restart Applicationes Failed');
+        return Response.buildError('Restart Applications Failed');
     }
 };
 
@@ -144,7 +144,7 @@ async function deleteAll() {
         const proc = await PMUtil.deleteAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Delete Applicationes Failed');
+        return Response.buildError('Delete Applications Failed');
     }
 };
 
@@ -162,7 +162,15 @@ async function reloadAll() {
         const proc = await PMUtil.reloadAll();
         return Response.buildSuccess(proc);
     } catch (e) {
-        return Response.buildError('Reload Applicationes Failed');
+        return Response.buildError('Reload Applications Failed');
+    }
+};
+
+async function isApplicationNameExist(applicationName) {
+    try {
+        Response.buildSuccess(ApplicationsUtil.isNameExist(applicationName));
+    } catch (e) {
+        return Response.buildError('Check application name exist Failed');
     }
 };
 
@@ -179,5 +187,6 @@ export default {
     deleteById,
     deleteAll,
     reloadById,
-    reloadAll
+    reloadAll,
+    isApplicationNameExist
 };
