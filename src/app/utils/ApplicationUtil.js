@@ -4,6 +4,7 @@ import {exec} from 'child_process';
 import unzip from 'unzip-stream';
 import config from '../../config';
 import PMUtil from './PMUtil';
+import TimeUtil from './TimeUtil';
 
 const dirPath = `${config.appsRootPath}/pm2-apps`,
     configPath = `${config.appsRootPath}/ecosystem.config.js`;
@@ -252,6 +253,41 @@ function updateConfig(applicationName, config) {
 }
 
 /**
+ * update new application config
+ * @param config
+ * @returns {*|void}
+ */
+function updateApplicationName(originName, newName) {
+
+    if (!originName || !newName) {
+        return;
+    }
+
+    try {
+
+        const applications = getConfigs(),
+            index = applications.findIndex(item => item && item.name === originName);
+
+        if (index === -1) {
+            return;
+        }
+
+        applications[index] = {
+            ...applications[index],
+            name: newName,
+            script: `${dirPath}/${newName}/${applications[index].rawScript}`,
+            lastUpdateTime: TimeUtil.getCurrentTime()
+        };
+
+        return setConfigs(applications);
+
+    } catch (e) {
+        return;
+    }
+
+}
+
+/**
  * check the application has package or not
  * @param name
  * @returns {boolean}
@@ -439,6 +475,7 @@ export default {
     isNameExist,
     appendConfig,
     updateConfig,
+    updateApplicationName,
     hasPackage,
     savePackage,
     decompressPackage,
