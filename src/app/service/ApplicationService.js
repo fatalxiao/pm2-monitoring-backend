@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import Response from '../utils/Response.js';
 import PMUtil from '../utils/PMUtil.js';
 import ApplicationsUtil from '../utils/ApplicationUtil.js';
@@ -166,7 +164,7 @@ async function reloadAll() {
     }
 };
 
-async function isApplicationNameExist(applicationName) {
+async function checkNameExist(applicationName) {
     try {
         Response.buildSuccess(ApplicationsUtil.isNameExist(applicationName));
     } catch (e) {
@@ -188,5 +186,5 @@ export default {
     deleteAll,
     reloadById,
     reloadAll,
-    isApplicationNameExist
+    checkNameExist
 };
