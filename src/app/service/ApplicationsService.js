@@ -1,49 +1,13 @@
 import Response from '../utils/Response.js';
 import ApplicationsUtil from '../utils/ApplicationUtil.js';
-import PMUtil from '../utils/PMUtil.js';
 
 async function getApplications() {
-
     try {
-
-        const data = ApplicationsUtil.getConfigs();
-
-        if (!data) {
-            return Response.buildSuccess([]);
-        }
-
-        // get pm2 list data
-        const processList = await PMUtil.list();
-
-        return Response.buildSuccess(data.filter(item => item).map(item => {
-
-            item = ApplicationsUtil.formatToUserConfig(item);
-
-            const index = processList.findIndex(p => p && p.name === item.name),
-                result = index === -1 ? {
-                    ...item,
-                    status: 'offline',
-                    port: ''
-                } : {
-                    ...item,
-                    pid: processList[index].pid,
-                    pm_id: processList[index].pm_id,
-                    status: processList[index].pm2_env.status || 'offline',
-                    port: processList[index].port || '',
-                    monit: processList[index].monit
-                };
-
-            return {
-                ...result,
-                isReady: ApplicationsUtil.hasPackage(item.name)
-            };
-
-        }));
-
+        const applications = await ApplicationsUtil.getApplications();
+        return Response.buildSuccess(applications);
     } catch (e) {
         return Response.buildError('Get Application List Failed');
     }
-
 };
 
 export default {
