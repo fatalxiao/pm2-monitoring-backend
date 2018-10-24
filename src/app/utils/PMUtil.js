@@ -1,4 +1,5 @@
 import pm2 from 'pm2';
+import ApplicationUtil from './ApplicationUtil';
 
 /**
  * connect pm2
@@ -39,23 +40,16 @@ function list() {
  * @returns {Promise<any>}
  */
 async function getStatusById(id) {
-    return new Promise((resolve, reject) => {
-        pm2.list((err, descriptionList) => {
 
-            if (err) {
-                reject(err);
-            }
+    const application = await ApplicationUtil.getApplications(),
+        index = application.findIndex(item => item && item.pm_id === id);
 
-            const index = descriptionList.findIndex(item => item && item.pm_id === id);
+    if (index === -1 || !application[index]) {
+        return;
+    }
 
-            if (index === -1) {
-                reject(`Cannot find Application by ID ${id}`);
-            }
+    return application[index].status || 'offline';
 
-            resolve(descriptionList[index].status);
-
-        });
-    });
 }
 
 /**
@@ -63,23 +57,16 @@ async function getStatusById(id) {
  * @returns {Promise<any>}
  */
 async function getStatusByName(name) {
-    return new Promise((resolve, reject) => {
-        pm2.list((err, descriptionList) => {
 
-            if (err) {
-                reject(err);
-            }
+    const application = await ApplicationUtil.getApplications(),
+        index = application.findIndex(item => item && item.name === name);
 
-            const index = descriptionList.findIndex(item => item && item.name === name);
+    if (index === -1 || !application[index]) {
+        return;
+    }
 
-            if (index === -1) {
-                reject(`Cannot find Application by name ${name}`);
-            }
+    return application[index].status || 'offline';
 
-            resolve(descriptionList[index].status);
-
-        });
-    });
 }
 
 /**
