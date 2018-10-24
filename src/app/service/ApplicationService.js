@@ -195,10 +195,7 @@ async function rename(originName, newName) {
             await PMUtil.stopByName(originName);
         }
 
-        await ApplicationsUtil.updateConfig(originName, {
-            name: newName,
-            lastUpdateTime: TimeUtil.getCurrentTime()
-        });
+        await ApplicationsUtil.updateApplicationName(originName, newName);
         await ApplicationsUtil.renamePackage(originName, newName);
         await ApplicationsUtil.renameApplication(originName, newName);
 
