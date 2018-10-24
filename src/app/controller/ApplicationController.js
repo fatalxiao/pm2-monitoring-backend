@@ -1,6 +1,6 @@
 import ApplicationService from '../service/ApplicationService.js';
 import Response from '../utils/Response.js';
-import {PostMapping, PutMapping} from '../utils/ApiDecorator';
+import {GetMapping, PostMapping, PutMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
 
@@ -127,6 +127,18 @@ class ApplicationController {
     @PutMapping({route: '/pm/application/reload'})
     static async reloadAll(ctx) {
         ctx.response.body = await ApplicationService.reloadAll();
+    }
+
+    @GetMapping({route: '/pm/application/exist/:applicationName'})
+    static async isApplicationNameExist(ctx) {
+
+        const applicationName = ctx.params.applicationName;
+        if (!applicationName) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
+        }
+
+        ctx.response.body = await ApplicationService.isApplicationNameExist(applicationName);
+
     }
 
 };
