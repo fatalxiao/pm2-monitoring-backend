@@ -24,7 +24,7 @@ class ApplicationController {
     static async create(ctx) {
 
         const requestData = ctx.request.body;
-        if (!requestData.name) {
+        if (!requestData || !requestData.name) {
             return ctx.response.body = Response.buildParamError('Application Name is required');
         }
 
@@ -138,6 +138,23 @@ class ApplicationController {
         }
 
         ctx.response.body = await ApplicationService.checkNameExist(applicationName);
+
+    }
+
+    @PutMapping({route: '/pm/application/rename/:applicationName'})
+    static async rename(ctx) {
+
+        const originName = ctx.params.applicationName;
+        if (!originName) {
+            return ctx.response.body = Response.buildParamError('Origin Application Name is required');
+        }
+
+        const requestData = ctx.request.body;
+        if (!requestData || !requestData.name) {
+            return ctx.response.body = Response.buildParamError('New Application Name is required');
+        }
+
+        ctx.response.body = await ApplicationService.rename(originName, requestData.name);
 
     }
 
