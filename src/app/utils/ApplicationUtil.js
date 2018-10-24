@@ -391,8 +391,10 @@ function renamePackage(originName, newName) {
         const originAppPath = `${dirPath}/${originName}.zip`,
             newAppPath = `${dirPath}/${newName}.zip`;
 
-        fs.copyFileSync(originAppPath, newAppPath);
-        fs.unlinkSync(originAppPath);
+        if (FsUtil.isExistSync(originAppPath)) {
+            fs.copyFileSync(originAppPath, newAppPath);
+            fs.unlinkSync(originAppPath);
+        }
 
         resolve();
 
@@ -414,7 +416,7 @@ function renameApplication(originName, newName) {
         const originAppPath = `${dirPath}/${originName}`,
             newAppPath = `${dirPath}/${newName}`;
 
-        if (fs.statSync(originAppPath).isDirectory()) {
+        if (FsUtil.isExistSync(originAppPath)) {
             FsUtil.copyRecursionSync(originAppPath, newAppPath);
             FsUtil.rmRecursionSync(originAppPath);
         }
