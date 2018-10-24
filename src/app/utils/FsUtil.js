@@ -11,6 +11,10 @@ function isExistSync(p) {
 
 function copyRecursionSync(src, dist, excludes) {
 
+    if (!isExistSync(dist)) {
+        fs.mkdirSync(dist);
+    }
+
     const paths = fs.readdirSync(src);
 
     for (let path of paths) {
