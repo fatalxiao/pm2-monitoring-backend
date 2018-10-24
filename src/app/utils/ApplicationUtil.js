@@ -112,21 +112,19 @@ function getConfigs() {
  * @param config
  */
 function setConfigs(config) {
+    return new Promise((resolve, reject) => {
 
-    if (!config) {
-        return;
-    }
-
-    try {
+        if (!config) {
+            reject();
+        }
 
         checkAppDir();
 
-        return fs.writeFileSync(configPath, 'module.exports={apps:' + JSON.stringify(config) + '};');
+        fs.writeFileSync(configPath, 'module.exports={apps:' + JSON.stringify(config) + '};');
 
-    } catch (e) {
-        return;
-    }
+        resolve();
 
+    });
 }
 
 function getConfig(applicationName) {
@@ -198,7 +196,7 @@ function isNameExist(applicationName) {
  * @param config
  * @returns {*|void}
  */
-function appendConfig(config) {
+async function appendConfig(config) {
 
     if (!config || !config.name) {
         return;
@@ -209,7 +207,7 @@ function appendConfig(config) {
         const applications = getConfigs();
         applications.push(config);
 
-        return setConfigs(applications);
+        return await setConfigs(applications);
 
     } catch (e) {
         return;
@@ -222,7 +220,7 @@ function appendConfig(config) {
  * @param config
  * @returns {*|void}
  */
-function updateConfig(applicationName, config) {
+async function updateConfig(applicationName, config) {
 
     if (!applicationName || !config) {
         return;
@@ -244,7 +242,7 @@ function updateConfig(applicationName, config) {
             ...config
         };
 
-        return setConfigs(applications);
+        return await setConfigs(applications);
 
     } catch (e) {
         return;
@@ -257,7 +255,7 @@ function updateConfig(applicationName, config) {
  * @param config
  * @returns {*|void}
  */
-function updateApplicationName(originName, newName) {
+async function updateApplicationName(originName, newName) {
 
     if (!originName || !newName) {
         return;
@@ -279,7 +277,7 @@ function updateApplicationName(originName, newName) {
             lastUpdateTime: TimeUtil.getCurrentTime()
         };
 
-        return setConfigs(applications);
+        return await setConfigs(applications);
 
     } catch (e) {
         return;
