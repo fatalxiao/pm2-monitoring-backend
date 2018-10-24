@@ -3,6 +3,7 @@ import FsUtil from './FsUtil';
 import {exec} from 'child_process';
 import unzip from 'unzip-stream';
 import config from '../../config';
+import PMUtil from './PMUtil';
 
 const dirPath = `${config.appsRootPath}/pm2-apps`,
     configPath = `${config.appsRootPath}/ecosystem.config.js`;
@@ -146,6 +147,44 @@ function getConfig(applicationName) {
     } catch (e) {
         return;
     }
+
+}
+
+async function getApplications() {
+
+    const data = getConfigs();
+
+    if (!data) {
+        return [];
+    }
+
+    // get pm2 list data
+    const processList = await PMUtil.list();
+
+    return data.filter(item => item).map(item => {
+
+        item = formatToUserConfig(item);
+
+        const index = processList.findIndex(p => p && p.name === item.name),
+            result = index === -1 ? {
+                ...item,
+                status: 'offline',
+                port: ''
+            } : {
+                ...item,
+                pid: processList[index].pid,
+                pm_id: processList[index].pm_id,
+                status: processList[index].pm2_env.status || 'offline',
+                port: processList[index].port || '',
+                monit: processList[index].monit
+            };
+
+        return {
+            ...result,
+            isReady: hasPackage(item.name)
+        };
+
+    });
 
 }
 
@@ -337,6 +376,54 @@ function installDependencies(name) {
     });
 }
 
+/**
+ * reset package name
+ */
+function renamePackage(originName, newName) {
+    return new Promise((resolve, reject) => {
+
+        if (!originName || !newName) {
+            reject();
+        }
+
+        checkAppDir();
+
+        const originAppPath = `${dirPath}/${originName}.zip`,
+            newAppPath = `${dirPath}/${newName}.zip`;
+
+        fs.copyFileSync(originAppPath, newAppPath);
+        fs.unlinkSync(originAppPath);
+
+        resolve();
+
+    });
+}
+
+/**
+ * reset application name
+ */
+function renameApplication(originName, newName) {
+    return new Promise((resolve, reject) => {
+
+        if (!originName || !newName) {
+            reject();
+        }
+
+        checkAppDir();
+
+        const originAppPath = `${dirPath}/${originName}`,
+            newAppPath = `${dirPath}/${newName}`;
+
+        if (fs.statSync(originAppPath).isDirectory()) {
+            FsUtil.copyRecursionSync(originAppPath, newAppPath);
+            FsUtil.rmRecursionSync(originAppPath);
+        }
+
+        resolve();
+
+    });
+}
+
 export default {
 
     DEFAULT_CONFIG,
@@ -346,6 +433,7 @@ export default {
     getConfigs,
     setConfigs,
     getConfig,
+    getApplications,
     isNameExist,
     appendConfig,
     updateConfig,
@@ -353,6 +441,8 @@ export default {
     savePackage,
     decompressPackage,
     cleanPackage,
-    installDependencies
+    installDependencies,
+    renamePackage,
+    renameApplication
 
 };
