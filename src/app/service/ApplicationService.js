@@ -190,7 +190,8 @@ async function rename(originName, newName) {
             });
         }
 
-        if (await PMUtil.getStatusByName(originName) !== '') {
+        const status = await PMUtil.getStatusByName(originName);
+        if (status && status !== 'offline') {
             await PMUtil.stopByName(originName);
         }
 
