@@ -35,6 +35,54 @@ function list() {
 }
 
 /**
+ * get application status by id
+ * @returns {Promise<any>}
+ */
+async function getStatusById(id) {
+    return new Promise((resolve, reject) => {
+        pm2.list((err, descriptionList) => {
+
+            if (err) {
+                reject(err);
+            }
+
+            const index = descriptionList.findIndex(item => item && item.pm_id === id);
+
+            if (index === -1) {
+                reject(`Cannot find Application by ID ${id}`);
+            }
+
+            resolve(descriptionList[index].status);
+
+        });
+    });
+}
+
+/**
+ * get application status by name
+ * @returns {Promise<any>}
+ */
+async function getStatusByName(name) {
+    return new Promise((resolve, reject) => {
+        pm2.list((err, descriptionList) => {
+
+            if (err) {
+                reject(err);
+            }
+
+            const index = descriptionList.findIndex(item => item && item.name === name);
+
+            if (index === -1) {
+                reject(`Cannot find Application by name ${name}`);
+            }
+
+            resolve(descriptionList[index].status);
+
+        });
+    });
+}
+
+/**
  * start app application
  * @param options
  * @returns {Promise<any>}
@@ -74,6 +122,33 @@ function stopById(id) {
 
     return connect((resolve, reject) => {
         pm2.stop(id, (err, proc) => {
+
+            pm2.disconnect();
+
+            if (err) {
+                reject(err);
+            }
+
+            resolve(proc);
+
+        });
+    });
+
+}
+
+/**
+ * stop application by application name
+ * @param name
+ * @returns {Promise<any>}
+ */
+function stopByName(name) {
+
+    if (name == undefined) {
+        return;
+    }
+
+    return connect((resolve, reject) => {
+        pm2.stop(name, (err, proc) => {
 
             pm2.disconnect();
 
@@ -256,8 +331,11 @@ function reloadAll() {
 export default {
     connect,
     list,
+    getStatusById,
+    getStatusByName,
     start,
     stopById,
+    stopByName,
     stopAll,
     restartById,
     restartAll,
