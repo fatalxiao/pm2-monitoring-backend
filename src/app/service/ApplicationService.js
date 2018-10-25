@@ -80,15 +80,15 @@ async function start(options) {
 
 async function startByName(applicationName) {
 
-    const data = ApplicationsUtil.getConfigs();
+    const applications = ApplicationsUtil.getConfigs();
     let index;
 
-    if (!data || data.length < 1
-        || (index = data.findIndex(item => item.name === applicationName)) === -1) {
+    if (!applications || applications.length < 1
+        || (index = applications.findIndex(item => item.name === applicationName)) === -1) {
         return Response.buildParamError('Application Name Not Found');
     }
 
-    return await start(data[index]);
+    return await start(applications[index]);
 
 };
 
@@ -121,8 +121,17 @@ async function stopAll() {
 
 async function restartById(applicationId) {
     try {
+
         const proc = await PMUtil.restartById(applicationId);
+
+        if (proc && proc[0] && proc[0].name) {
+            await ApplicationsUtil.updateConfig(proc[0].name, {
+                lastStartTime: TimeUtil.getCurrentTime()
+            });
+        }
+
         return Response.buildSuccess(proc);
+
     } catch (e) {
         return Response.buildError('Restart Application Failed');
     }
@@ -130,8 +139,20 @@ async function restartById(applicationId) {
 
 async function restartAll() {
     try {
-        const proc = await PMUtil.restartAll();
+
+        const proc = await PMUtil.restartAll(),
+            applications = ApplicationsUtil.getConfigs();
+
+        for (let application of applications) {
+            if (application && application.name) {
+                await ApplicationsUtil.updateConfig(application.name, {
+                    lastStartTime: TimeUtil.getCurrentTime()
+                });
+            }
+        }
+
         return Response.buildSuccess(proc);
+
     } catch (e) {
         return Response.buildError('Restart Applications Failed');
     }
