@@ -154,6 +154,10 @@ class ApplicationController {
             return ctx.response.body = Response.buildParamError('New Application Name is required');
         }
 
+        if (originName === requestData.name) {
+            return ctx.response.body = Response.buildSuccess('');
+        }
+
         ctx.response.body = await ApplicationService.rename(originName, requestData.name);
 
     }
