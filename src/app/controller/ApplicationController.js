@@ -1,6 +1,6 @@
 import ApplicationService from '../service/ApplicationService.js';
 import Response from '../utils/Response.js';
-import {GetMapping, PostMapping, PutMapping} from '../utils/ApiDecorator';
+import {GetMapping, PostMapping, PutMapping, DeleteMapping} from '../utils/ApiDecorator';
 
 class ApplicationController {
 
@@ -159,6 +159,18 @@ class ApplicationController {
         }
 
         ctx.response.body = await ApplicationService.rename(originName, requestData.name);
+
+    }
+
+    @DeleteMapping({route: '/pm/application/delete/:applicationName'})
+    static async del(ctx) {
+
+        const applicationName = ctx.params.applicationName;
+        if (!applicationName) {
+            return ctx.response.body = Response.buildParamError('Application Name is required');
+        }
+
+        ctx.response.body = await ApplicationService.del(applicationName);
 
     }
 
