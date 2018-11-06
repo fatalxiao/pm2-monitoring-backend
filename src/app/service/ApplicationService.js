@@ -213,7 +213,7 @@ async function rename(originName, newName) {
 
         const status = await PMUtil.getStatusByName(originName);
         if (status && status !== 'offline') {
-            await PMUtil.stopByName(originName);
+            await PMUtil.deleteByName(originName);
         }
 
         await ApplicationsUtil.updateApplicationName(originName, newName);
@@ -224,6 +224,30 @@ async function rename(originName, newName) {
 
     } catch (e) {
         return Response.buildError('Reset application name Failed');
+    }
+};
+
+async function del(applicationName) {
+    try {
+
+        if (!ApplicationsUtil.isNameExist(applicationName)) {
+            return Response.buildParamError({
+                name: 'Application Name is undefined'
+            });
+        }
+
+        const status = await PMUtil.getStatusByName(applicationName);
+        if (status && status !== 'offline') {
+            await PMUtil.deleteByName(applicationName);
+        }
+
+        await ApplicationsUtil.deletePackage(applicationName);
+        await ApplicationsUtil.deleteApplication(applicationName);
+
+        return Response.buildSuccess();
+
+    } catch (e) {
+        return Response.buildError('Delete application Failed');
     }
 };
 
@@ -243,5 +267,6 @@ export default {
     reloadById,
     reloadAll,
     checkNameExist,
-    rename
+    rename,
+    del
 };
