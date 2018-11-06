@@ -460,6 +460,50 @@ function renameApplication(originName, newName) {
     });
 }
 
+/**
+ * reset package name
+ */
+function deletePackage(applicationName) {
+    return new Promise((resolve, reject) => {
+
+        if (!applicationName) {
+            reject();
+        }
+
+        const filePath = `${dirPath}/${applicationName}.zip`;
+
+        if (FsUtil.isExistSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+
+        resolve();
+
+    });
+}
+
+/**
+ * reset application name
+ */
+function deleteApplication(applicationName) {
+    return new Promise((resolve, reject) => {
+
+        if (!applicationName) {
+            reject();
+        }
+
+        checkAppDir();
+
+        const dirPath = `${dirPath}/${applicationName}`;
+
+        if (FsUtil.isExistSync(dirPath)) {
+            FsUtil.rmRecursionSync(dirPath);
+        }
+
+        resolve();
+
+    });
+}
+
 export default {
 
     DEFAULT_CONFIG,
@@ -480,6 +524,8 @@ export default {
     cleanPackage,
     installDependencies,
     renamePackage,
-    renameApplication
+    renameApplication,
+    deletePackage,
+    deleteApplication
 
 };
