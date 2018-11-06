@@ -49,7 +49,7 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/start/:applicationName'})
+    @PutMapping({route: '/pm/application/process/start/:applicationName'})
     static async startByName(ctx) {
 
         const applicationName = ctx.params.applicationName;
@@ -61,7 +61,7 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/stop/:applicationId'})
+    @PutMapping({route: '/pm/application/process/stop/:applicationId'})
     static async stopById(ctx) {
 
         const applicationId = ctx.params.applicationId;
@@ -73,12 +73,12 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/stop'})
+    @PutMapping({route: '/pm/application/process/stop'})
     static async stopAll(ctx) {
         ctx.response.body = await ApplicationService.stopAll();
     }
 
-    @PutMapping({route: '/pm/application/restart/:applicationId'})
+    @PutMapping({route: '/pm/application/process/restart/:applicationId'})
     static async restartById(ctx) {
 
         const applicationId = ctx.params.applicationId;
@@ -90,12 +90,12 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/restart'})
+    @PutMapping({route: '/pm/application/process/restart'})
     static async restartAll(ctx) {
         ctx.response.body = await ApplicationService.restartAll();
     }
 
-    @PutMapping({route: '/pm/application/delete/:applicationId'})
+    @PutMapping({route: '/pm/application/process/delete/:applicationId'})
     static async deleteById(ctx) {
 
         const applicationId = ctx.params.applicationId;
@@ -107,12 +107,12 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/delete'})
+    @PutMapping({route: '/pm/application/process/delete'})
     static async deleteAll(ctx) {
         ctx.response.body = await ApplicationService.deleteAll();
     }
 
-    @PutMapping({route: '/pm/application/reload/:applicationId'})
+    @PutMapping({route: '/pm/application/process/reload/:applicationId'})
     static async reloadById(ctx) {
 
         const applicationId = ctx.params.applicationId;
@@ -124,7 +124,7 @@ class ApplicationController {
 
     }
 
-    @PutMapping({route: '/pm/application/reload'})
+    @PutMapping({route: '/pm/application/process/reload'})
     static async reloadAll(ctx) {
         ctx.response.body = await ApplicationService.reloadAll();
     }
