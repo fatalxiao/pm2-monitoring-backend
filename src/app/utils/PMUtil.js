@@ -247,6 +247,33 @@ function deleteById(id) {
 }
 
 /**
+ * delete application by application name
+ * @param name
+ * @returns {Promise<any>}
+ */
+function deleteByName(name) {
+
+    if (name == undefined) {
+        return;
+    }
+
+    return connect((resolve, reject) => {
+        pm2.delete(name, (err, proc) => {
+
+            pm2.disconnect();
+
+            if (err) {
+                reject(err);
+            }
+
+            resolve(proc);
+
+        });
+    });
+
+}
+
+/**
  * delete all app applications
  * @param id
  * @returns {Promise<any>}
@@ -327,6 +354,7 @@ export default {
     restartById,
     restartAll,
     deleteById,
+    deleteByName,
     deleteAll,
     reloadById,
     reloadAll
