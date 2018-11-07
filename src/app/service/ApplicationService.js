@@ -217,8 +217,8 @@ async function rename(originName, newName) {
         }
 
         await ApplicationsUtil.updateApplicationName(originName, newName);
-        await ApplicationsUtil.renamePackage(originName, newName);
         await ApplicationsUtil.renameApplication(originName, newName);
+        await ApplicationsUtil.renamePackage(originName, newName);
 
         return Response.buildSuccess();
 
@@ -241,8 +241,8 @@ async function del(applicationName) {
             await PMUtil.deleteByName(applicationName);
         }
 
-        await ApplicationsUtil.deletePackage(applicationName);
         await ApplicationsUtil.deleteApplication(applicationName);
+        await ApplicationsUtil.deletePackage(applicationName);
 
         return Response.buildSuccess();
 
