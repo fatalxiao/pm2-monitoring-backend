@@ -522,7 +522,7 @@ async function deleteConfig(applicationName) {
             return;
         }
 
-        delete applications[index];
+        applications.splice(index, 1);
 
         return await setConfigs(applications);
 
