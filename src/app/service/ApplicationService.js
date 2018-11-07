@@ -243,6 +243,7 @@ async function del(applicationName) {
 
         await ApplicationsUtil.deleteApplication(applicationName);
         await ApplicationsUtil.deletePackage(applicationName);
+        await ApplicationsUtil.deleteConfig(applicationName);
 
         return Response.buildSuccess();
 
