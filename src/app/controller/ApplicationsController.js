@@ -5,8 +5,9 @@ class ApplicationsController {
 
     @WsGetMapping({route: '/ws/pm/applications'})
     static async getApplications(ctx) {
-        ctx.websocket.on('message', () => {
-            ApplicationsService.getApplications().then(data => ctx.websocket.send(data));
+        ctx.websocket.on('message', async () => {
+            const data = await ApplicationsService.getApplications();
+            ctx.websocket.send(data);
         });
     }
 
