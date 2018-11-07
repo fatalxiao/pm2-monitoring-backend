@@ -411,31 +411,6 @@ function installDependencies(name) {
 }
 
 /**
- * reset package name
- */
-function renamePackage(originName, newName) {
-    return new Promise((resolve, reject) => {
-
-        if (!originName || !newName) {
-            reject();
-        }
-
-        checkAppDir();
-
-        const originAppPath = `${dirPath}/${originName}.zip`,
-            newAppPath = `${dirPath}/${newName}.zip`;
-
-        if (FsUtil.isExistSync(originAppPath)) {
-            fs.copyFileSync(originAppPath, newAppPath);
-            fs.unlinkSync(originAppPath);
-        }
-
-        resolve();
-
-    });
-}
-
-/**
  * reset application name
  */
 function renameApplication(originName, newName) {
@@ -463,6 +438,54 @@ function renameApplication(originName, newName) {
 /**
  * reset package name
  */
+function renamePackage(originName, newName) {
+    return new Promise((resolve, reject) => {
+
+        if (!originName || !newName) {
+            reject();
+        }
+
+        checkAppDir();
+
+        const originAppPath = `${dirPath}/${originName}.zip`,
+            newAppPath = `${dirPath}/${newName}.zip`;
+
+        if (FsUtil.isExistSync(originAppPath)) {
+            fs.copyFileSync(originAppPath, newAppPath);
+            fs.unlinkSync(originAppPath);
+        }
+
+        resolve();
+
+    });
+}
+
+/**
+ * delete application
+ */
+function deleteApplication(applicationName) {
+    return new Promise((resolve, reject) => {
+
+        if (!applicationName) {
+            reject();
+        }
+
+        checkAppDir();
+
+        const applicationPath = `${dirPath}/${applicationName}`;
+
+        if (FsUtil.isExistSync(applicationPath)) {
+            FsUtil.rmRecursionSync(applicationPath);
+        }
+
+        resolve();
+
+    });
+}
+
+/**
+ * delete package
+ */
 function deletePackage(applicationName) {
     return new Promise((resolve, reject) => {
 
@@ -474,29 +497,6 @@ function deletePackage(applicationName) {
 
         if (FsUtil.isExistSync(filePath)) {
             fs.unlinkSync(filePath);
-        }
-
-        resolve();
-
-    });
-}
-
-/**
- * reset application name
- */
-function deleteApplication(applicationName) {
-    return new Promise((resolve, reject) => {
-
-        if (!applicationName) {
-            reject();
-        }
-
-        checkAppDir();
-
-        const dirPath = `${dirPath}/${applicationName}`;
-
-        if (FsUtil.isExistSync(dirPath)) {
-            FsUtil.rmRecursionSync(dirPath);
         }
 
         resolve();
@@ -523,9 +523,9 @@ export default {
     decompressPackage,
     cleanPackage,
     installDependencies,
-    renamePackage,
     renameApplication,
-    deletePackage,
-    deleteApplication
+    renamePackage,
+    deleteApplication,
+    deletePackage
 
 };
