@@ -504,6 +504,34 @@ function deletePackage(applicationName) {
     });
 }
 
+/**
+ * delete package
+ */
+async function deleteConfig(applicationName) {
+
+    if (!applicationName) {
+        return;
+    }
+
+    try {
+
+        const applications = getConfigs(),
+            index = applications.findIndex(item => item && item.name === applicationName);
+
+        if (index === -1) {
+            return;
+        }
+
+        delete applications[index];
+
+        return await setConfigs(applications);
+
+    } catch (e) {
+        return;
+    }
+
+}
+
 export default {
 
     DEFAULT_CONFIG,
@@ -526,6 +554,7 @@ export default {
     renameApplication,
     renamePackage,
     deleteApplication,
-    deletePackage
+    deletePackage,
+    deleteConfig
 
 };
